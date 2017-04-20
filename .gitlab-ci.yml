@@ -4,6 +4,11 @@ stages:
   - test
   - deploy
 
+before_script:
+  - pushd ..
+  - if [ -d "RiseClipseDeveloper" ]; then cd RiseClipseDeveloper ; git pull ; else git clone https://gitlab.centralesupelec.fr/RiseClipseGroup/RiseClipseDeveloper.git ; fi
+  - popd
+
 build:
   stage: build
   script:
