@@ -1,0 +1,13 @@
+stages:
+  - build
+  - test
+  - deploy
+
+build:
+  stage: build
+  script:
+    - "mvn clean install"
+
+  tags:
+    - riseclipse
+
