@@ -43,6 +43,16 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
     }
 
     /**
+     * Change the current singleton.
+     * @param newConsole the new console to use
+     */
+    public static synchronized void changeConsole( IRiseClipseConsole newConsole ) {
+        if( newConsole != null ) {
+            console = newConsole;
+        }
+    }
+
+    /**
      * The current level of displayed messages
      */
     protected int currentLevel;
