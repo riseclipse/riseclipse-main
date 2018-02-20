@@ -119,5 +119,12 @@ public abstract class RiseClipseModelLoader {
         }
         return null;
     }
+    
+    public void finalizeLoad() {
+        for ( Resource resource : resourceSet.getResources() ) {
+            // we do not ignore unresolved references
+            (( IRiseClipseResource ) resource ).finalizeLoad( false );
+        }
+    }
 
 }
