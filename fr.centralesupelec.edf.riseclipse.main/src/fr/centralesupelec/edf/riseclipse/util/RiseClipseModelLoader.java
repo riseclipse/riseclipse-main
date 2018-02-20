@@ -38,7 +38,10 @@ public abstract class RiseClipseModelLoader {
     protected RiseClipseModelLoader( IRiseClipseConsole console ) {
         this.console = console;
         
-        // Create a resource set to hold the resources.
+        reset();
+    }
+    
+    public void reset() {
         this.resourceSet = new ResourceSetImpl();
     }
     
