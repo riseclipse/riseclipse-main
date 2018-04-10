@@ -33,6 +33,8 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class RiseClipseResourceSet extends ResourceSetImpl {
     
+    private static final String XMLNS_ATTRIBUTE_NAME = "xmlns";
+    
     private HashMap< String, Factory > resourceFactories;
     
     private ResourceFactoryFinder factoryFinder;
@@ -78,12 +80,10 @@ public class RiseClipseResourceSet extends ResourceSetImpl {
                 saxParser = saxParserFactory.newSAXParser();
             }
             catch( ParserConfigurationException e ) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new RiseClipseRuntimeException( "RiseClipseResourceSet.ResourceFactoryFinder", e );
             }
             catch( SAXException e ) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new RiseClipseRuntimeException( "RiseClipseResourceSet.ResourceFactoryFinder", e );
             }
         }
 
@@ -101,12 +101,10 @@ public class RiseClipseResourceSet extends ResourceSetImpl {
                                 furi = furi.substring( 0, dc );
                             }
                         }
-                        // TODO: define named constant
-                        if( "xmlns".equals( furi ) ) {
+                        if( XMLNS_ATTRIBUTE_NAME.equals( furi ) ) {
                             String ns = attributes.getValue( i );
-                            if( RiseClipseResourceSet.this.resourceFactories.containsKey( ns ) ) {
-                                Resource.Factory factory = RiseClipseResourceSet.this.resourceFactories
-                                        .get( ns );
+                            if( RiseClipseResourceSet.this.resourceFactories.containsKey( ns )) {
+                                Resource.Factory factory = RiseClipseResourceSet.this.resourceFactories.get( ns );
                                 // Stop parsing and give back result
                                 throw new FactoryFoundException( factory );
                             }
