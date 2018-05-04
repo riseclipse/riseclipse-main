@@ -106,6 +106,10 @@ public abstract class RiseClipseModelLoader {
                     if( resourceSet.getResources().size() > currentSize ) {
                         resourceSet.getResources().remove( currentSize );
                     }
+                } else if( re instanceof NullPointerException ) {
+                	// To get more information and locate the problem
+                    console.error( "Problem loading " + resourceURI + " : Null Pointer Exception (see log)");
+                    re.printStackTrace();
                 }
                 else {
                     console.error( "Problem loading " + resourceURI + " : " + cause );
