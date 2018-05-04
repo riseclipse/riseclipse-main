@@ -17,6 +17,12 @@
     <relativePath>../RiseClipseDeveloper/fr.centralesupelec.edf.riseclipse.developer.maven/pom-root.xml</relativePath>
   </parent>
 
+  <scm>
+    <connection>scm:git:git@gitlab.centralesupelec.fr:RiseClipseGroup/RiseClipseMain.git</connection>
+    <developerConnection>scm:git:git@gitlab.centralesupelec.fr:RiseClipseGroup/RiseClipseMain.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+ 
   <modules>
     <module>fr.centralesupelec.edf.riseclipse.main</module>
   </modules>
