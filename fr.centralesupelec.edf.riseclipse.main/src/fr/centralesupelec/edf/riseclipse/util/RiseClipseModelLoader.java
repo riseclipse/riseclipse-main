@@ -36,7 +36,7 @@ import fr.centralesupelec.edf.riseclipse.util.IRiseClipseConsole;
 
 public abstract class RiseClipseModelLoader {
     
-    protected ResourceSetImpl resourceSet;
+    protected ResourceSet resourceSet;
     protected IRiseClipseConsole console;
 
     protected RiseClipseModelLoader( IRiseClipseConsole console ) {
@@ -49,7 +49,11 @@ public abstract class RiseClipseModelLoader {
         this.resourceSet = new ResourceSetImpl();
     }
     
-    public ResourceSet getResourceSet() {
+    public void reset( ResourceSet resourceSet ) {
+        this.resourceSet = resourceSet;
+    }
+    
+   public ResourceSet getResourceSet() {
         return resourceSet;
     }
     
