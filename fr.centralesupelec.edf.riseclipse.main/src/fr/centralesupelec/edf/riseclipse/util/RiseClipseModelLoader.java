@@ -58,7 +58,7 @@ public abstract class RiseClipseModelLoader {
     }
     
     public Resource load( String name ) {
-        console.info( "Loading: " + name );
+        console.verbose( "Loading file " + name + " in RiseCliupse" );
         
         int currentSize = resourceSet.getResources().size();
         
@@ -74,6 +74,7 @@ public abstract class RiseClipseModelLoader {
             ZipInputStream in = new ZipInputStream( resourceSet.getURIConverter().createInputStream( resourceURIs.get( 0 )));
             ZipEntry entry = in.getNextEntry();
             if( entry != null ) {
+                console.verbose( "Found a zip archived file" );
                 String zipURI = resourceURIs.get( 0 ).toString();
                 resourceURIs.clear();
                 while( entry != null ) {
