@@ -28,22 +28,30 @@ package fr.centralesupelec.edf.riseclipse.util;
  */
 public interface IRiseClipseConsole {
 	
-	public final static int INFO_LEVEL = 1;
-	public final static int WARNING_LEVEL = 2;
-	public final static int ERROR_LEVEL = 3;
-	public final static int FATAL_LEVEL = 4;
+    public final static int VERBOSE_LEVEL = 1;
+	public final static int INFO_LEVEL = 2;
+	public final static int WARNING_LEVEL = 3;
+	public final static int ERROR_LEVEL = 4;
+	public final static int FATAL_LEVEL = 5;
 	
 	/**
 	 * Set the current level of displayed messages.
 	 * 
 	 * @param level minimal level of messages to be displayed,
-	 *              ignored if outside [INFO_LEVEL..FATAL_LEVEL]
+	 *              ignored if outside [VERBOSE_LEVEL..FATAL_LEVEL]
 	 * @return the previous level
 	 */
 	public int setLevel( int level );
     
+    /**
+     * Output message o.toString() if current level is VERBOSE_LEVEL
+     * 
+     * @param o message to be displayed
+     */
+    public void verbose( Object o );
+
 	/**
-	 * Output message o.toString() if current level is INFO_LEVEL
+	 * Output message o.toString() if current level is INFO_LEVEL or below
 	 * 
 	 * @param o message to be displayed
 	 */

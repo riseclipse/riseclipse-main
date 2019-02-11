@@ -64,11 +64,11 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
 	/**
 	 * Constructs a new console, using it as the unique one
 	 * (the previous one, if any, is forgotten).
-	 * The initial level is set to {@link IRiseClipseConsole#INFO_LEVEL}
+	 * The initial level is set to {@link IRiseClipseConsole#WARNING_LEVEL}
 	 */
     protected AbstractRiseClipseConsole() {
         console = this;
-        currentLevel = INFO_LEVEL;
+        currentLevel = WARNING_LEVEL;
     }
     
     /**
@@ -76,15 +76,25 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
      */
 	public int setLevel( int level ) {
 	    int previousLevel = currentLevel;
-		if(( level >= INFO_LEVEL ) && ( level <= FATAL_LEVEL )) {
+		if(( level >= VERBOSE_LEVEL ) && ( level <= FATAL_LEVEL )) {
 			currentLevel = level;
 		}
 		return previousLevel;
 	}
     
+    /**
+     * Prefixes message with VERBOSE and delegates to {@link AbstractRiseClipseConsole#doOutputMessage(String)}
+     * if current level is {@link #VERBOSE_LEVEL}
+     */
+    public final void verbose( Object o ) {
+        if( currentLevel <= VERBOSE_LEVEL ) {
+            doOutputMessage( "VERBOSE: " + o.toString() );
+        }
+    }
+    
 	/**
 	 * Prefixes message with INFO and delegates to {@link AbstractRiseClipseConsole#doOutputMessage(String)}
-	 * if current level is {@link #INFO_LEVEL}
+	 * if current level is {@link #INFO_LEVEL} or below
 	 */
     public final void info( Object o ) {
     	if( currentLevel <= INFO_LEVEL ) {
