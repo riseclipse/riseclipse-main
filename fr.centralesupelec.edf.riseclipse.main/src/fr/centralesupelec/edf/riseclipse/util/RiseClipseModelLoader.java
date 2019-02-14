@@ -27,8 +27,6 @@ import java.util.zip.ZipInputStream;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.IllegalValueException;
 
 import fr.centralesupelec.edf.riseclipse.util.IRiseClipseConsole;
@@ -36,7 +34,7 @@ import fr.centralesupelec.edf.riseclipse.util.IRiseClipseConsole;
 
 public abstract class RiseClipseModelLoader {
     
-    protected ResourceSet resourceSet;
+    protected IRiseClipseResourceSet resourceSet;
     protected IRiseClipseConsole console;
 
     protected RiseClipseModelLoader( IRiseClipseConsole console ) {
@@ -46,14 +44,14 @@ public abstract class RiseClipseModelLoader {
     }
     
     public void reset() {
-        this.resourceSet = new ResourceSetImpl();
+        this.resourceSet = new RiseClipseResourceSet();
     }
     
-    public void reset( ResourceSet resourceSet ) {
+    public void reset( IRiseClipseResourceSet resourceSet ) {
         this.resourceSet = resourceSet;
     }
     
-   public ResourceSet getResourceSet() {
+   public IRiseClipseResourceSet getResourceSet() {
         return resourceSet;
     }
     
@@ -137,10 +135,7 @@ public abstract class RiseClipseModelLoader {
     }
     
     public void finalizeLoad() {
-        for ( Resource resource : resourceSet.getResources() ) {
-            // we do not ignore unresolved references
-            (( IRiseClipseResource ) resource ).finalizeLoad( false );
-        }
+        resourceSet.finalizeLoad( console );
     }
 
 }

@@ -98,6 +98,16 @@
                </appinfo>
             </annotation>
          </attribute>
+         <attribute name="resourceSetFactory" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="fr.centralesupelec.edf.riseclipse.util.RiseClipseResourceSetFactory:"/>
+               </appinfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
@@ -158,7 +168,6 @@
       aurelie.dehouck-neveu@edf.fr
   Web site:
       http://wdi.supelec.fr/software/RiseClipse/
-
       </documentation>
    </annotation>
 
