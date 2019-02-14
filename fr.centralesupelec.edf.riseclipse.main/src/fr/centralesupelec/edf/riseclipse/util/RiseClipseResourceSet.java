@@ -75,18 +75,6 @@ public class RiseClipseResourceSet extends ResourceSetImpl implements IRiseClips
     }
 
     /* (non-Javadoc)
-     * @see org.eclipse.emf.ecore.resource.impl.ResourceSetImpl#createResource(org.eclipse.emf.common.util.URI)
-     */
-    @Override
-    public IRiseClipseResource createResource( URI uri ) {
-        Resource res = super.createResource( uri );
-        if(( res != null ) && ( ! ( res instanceof IRiseClipseResource ))) {
-            throw new RiseClipseFatalException( "RiseClipseResourceSet.createResource(): not an IRiseClipseResource", null );
-        }
-        return ( IRiseClipseResource ) res;
-    }
-
-    /* (non-Javadoc)
      * @see org.eclipse.emf.ecore.resource.impl.ResourceSetImpl#createResource(org.eclipse.emf.common.util.URI, java.lang.String)
      */
     @Override
