@@ -44,7 +44,7 @@ public abstract class RiseClipseModelLoader {
     }
     
     public void reset() {
-        this.resourceSet = new RiseClipseResourceSet( console );
+        this.resourceSet = new RiseClipseResourceSet( true, console );
     }
     
     public void reset( IRiseClipseResourceSet resourceSet ) {

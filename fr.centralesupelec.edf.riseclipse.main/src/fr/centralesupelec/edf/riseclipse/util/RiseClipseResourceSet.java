@@ -35,6 +35,8 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 public class RiseClipseResourceSet extends ResourceSetImpl implements IRiseClipseResourceSet {
 
     protected IRiseClipseConsole console;
+    // If true, only IRiseClipseResource can be added
+    protected boolean strictContent;
     
     // When the resourceSet will load several resources at once, it is
     // useless to call finalizeLoad() after each one. Indeed, such a call
@@ -49,8 +51,9 @@ public class RiseClipseResourceSet extends ResourceSetImpl implements IRiseClips
     // a getResource().
     private boolean callFinalizeLoadAfterGetResource;
 
-    public RiseClipseResourceSet( IRiseClipseConsole console ) {
+    public RiseClipseResourceSet( boolean strictContent, IRiseClipseConsole console ) {
         this.console = console;
+        this.strictContent = strictContent;
         this.callFinalizeLoadAfterGetResource = false;
     }
     
@@ -78,10 +81,9 @@ public class RiseClipseResourceSet extends ResourceSetImpl implements IRiseClips
         // so this should not be a problem.
         EList< IRiseClipseResource > res = new BasicEList<>();
         for( Resource r : super.getResources() ) {
-           if( ! ( r instanceof IRiseClipseResource )) {
-               throw new RiseClipseFatalException( "RiseClipseResourceSet.getRiseClipseResources(): not an IRiseClipseResource", null );
+           if( r instanceof IRiseClipseResource ) {
+               res.add(( IRiseClipseResource ) r );
            }
-           res.add(( IRiseClipseResource ) r );
        }
         
         return res;
@@ -91,25 +93,29 @@ public class RiseClipseResourceSet extends ResourceSetImpl implements IRiseClips
      * @see org.eclipse.emf.ecore.resource.impl.ResourceSetImpl#getResource(org.eclipse.emf.common.util.URI, boolean)
      */
     @Override
-    public IRiseClipseResource getResource( URI uri, boolean loadOnDemand ) {
+    public Resource getResource( URI uri, boolean loadOnDemand ) {
         Resource res = super.getResource( uri, loadOnDemand );
-        if(( res != null ) && ( ! ( res instanceof IRiseClipseResource ))) {
-            throw new RiseClipseFatalException( "RiseClipseResourceSet.getResource(): not an IRiseClipseResource", null );
+        // createResource has been called before, so check is useless
+//        if(( res != null ) && strictContent && ( ! ( res instanceof IRiseClipseResource ))) {
+//            throw new RiseClipseFatalException( "RiseClipseResourceSet.getResource(): not an IRiseClipseResource", null );
+//        }
+        
+        if( callFinalizeLoadAfterGetResource && ( res instanceof IRiseClipseResource )) {
+            finalizeLoad( console );
         }
-        if( callFinalizeLoadAfterGetResource ) finalizeLoad( console );
-        return ( IRiseClipseResource ) res;
+        return res;
     }
 
     /* (non-Javadoc)
      * @see org.eclipse.emf.ecore.resource.impl.ResourceSetImpl#createResource(org.eclipse.emf.common.util.URI, java.lang.String)
      */
     @Override
-    public IRiseClipseResource createResource( URI uri, String contentType ) {
+    public Resource createResource( URI uri, String contentType ) {
         Resource res = super.createResource( uri, contentType );
-        if(( res != null ) && ( ! ( res instanceof IRiseClipseResource ))) {
+        if(( res != null ) && strictContent && ( ! ( res instanceof IRiseClipseResource ))) {
             throw new RiseClipseFatalException( "RiseClipseResourceSet.getResource(): not an IRiseClipseResource", null );
         }
-        return ( IRiseClipseResource ) res;
+        return res;
     }
 
 }
