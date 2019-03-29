@@ -18,123 +18,106 @@
  */
 package fr.centralesupelec.edf.riseclipse.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
+import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.Resource.Factory;
-import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
 
-public class RiseClipseResourceSet extends ResourceSetImpl {
-    
-    private static final String XMLNS_ATTRIBUTE_NAME = "xmlns";
-    
-    private HashMap< String, Factory > resourceFactories;
-    
-    private ResourceFactoryFinder factoryFinder;
+/**
+ * Minimal implementation of ResourceSet for RiseClipse conforming metamodels.
+ * It checks that only IRiseClipseResource are used, and give access to
+ * contained resources as IRiseClipseResource
+ *  
+ * @author Dominique Marcadet
+ *
+ */
+public class RiseClipseResourceSet extends ResourceSetImpl implements IRiseClipseResourceSet {
 
-    public RiseClipseResourceSet( HashMap< String, Resource.Factory > resourceFactories ) {
-        this.resourceFactories = resourceFactories;
-        this.factoryFinder = new ResourceFactoryFinder();
+    protected IRiseClipseConsole console;
+    // If true, only IRiseClipseResource can be added
+    protected boolean strictContent;
+    
+    // When the resourceSet will load several resources at once, it is
+    // useless to call finalizeLoad() after each one. Indeed, such a call
+    // can lead to wrong error messages.
+    // As the resourceSet do not know when the last resource is loaded,
+    // it is the client that must call finalizeLoad() in this case.
+    //
+    // When a resource is added to an existing resourceSet, the client
+    // may not have an easy way to call finalizeLoad() after (the "load
+    // resource" command in RiseClipse editor use directly the editing
+    // domain). If set, this boolean will then call finalizeLoad() after
+    // a getResource().
+    private boolean callFinalizeLoadAfterGetResource;
+
+    public RiseClipseResourceSet( boolean strictContent, IRiseClipseConsole console ) {
+        this.console = console;
+        this.strictContent = strictContent;
+        this.callFinalizeLoadAfterGetResource = false;
+    }
+    
+    // TODO: is unset needed ?
+    public void setCallFinalizeLoadAfterGetResource() {
+        callFinalizeLoadAfterGetResource = true;
     }
 
     @Override
+    public void printStatistics( IRiseClipseConsole console ) {
+        for( IRiseClipseResource r : getRiseClipseResources() ) {
+            r.printStatistics( console );
+        }
+    }
+
+    @Override
+    public void finalizeLoad( IRiseClipseConsole console ) {
+        for( IRiseClipseResource r : getRiseClipseResources() ) {
+            r.finalizeLoad( console );
+        }
+    }
+
+    public EList< IRiseClipseResource > getRiseClipseResources() {
+        // The list is copied, but it is expected that the number of resources is low,
+        // so this should not be a problem.
+        EList< IRiseClipseResource > res = new BasicEList<>();
+        for( Resource r : super.getResources() ) {
+           if( r instanceof IRiseClipseResource ) {
+               res.add(( IRiseClipseResource ) r );
+           }
+       }
+        
+        return res;
+    }
+
+    /* (non-Javadoc)
+     * @see org.eclipse.emf.ecore.resource.impl.ResourceSetImpl#getResource(org.eclipse.emf.common.util.URI, boolean)
+     */
+    @Override
+    public Resource getResource( URI uri, boolean loadOnDemand ) {
+        Resource res = super.getResource( uri, loadOnDemand );
+        // createResource has been called before, so check is useless
+//        if(( res != null ) && strictContent && ( ! ( res instanceof IRiseClipseResource ))) {
+//            throw new RiseClipseFatalException( "RiseClipseResourceSet.getResource(): not an IRiseClipseResource", null );
+//        }
+        
+        if( callFinalizeLoadAfterGetResource && ( res instanceof IRiseClipseResource )) {
+            finalizeLoad( console );
+        }
+        return res;
+    }
+
+    /* (non-Javadoc)
+     * @see org.eclipse.emf.ecore.resource.impl.ResourceSetImpl#createResource(org.eclipse.emf.common.util.URI, java.lang.String)
+     */
+    @Override
     public Resource createResource( URI uri, String contentType ) {
-        Resource.Factory f = this.factoryFinder.findFactoryFor( uri );
-        // If we don't find any factory registered as RiseClipse metamodel, use the
-        // standard mechanism. This is at least needed for OCL documents
-        if( f != null ) {
-            Resource result = f.createResource( uri );
-            getResources().add( result );
-            return result;
+        Resource res = super.createResource( uri, contentType );
+        if(( res != null ) && strictContent && ( ! ( res instanceof IRiseClipseResource ))) {
+            throw new RiseClipseFatalException( "RiseClipseResourceSet.getResource(): not an IRiseClipseResource", null );
         }
-        return super.createResource( uri, contentType );
-    }
-    
-    @SuppressWarnings( "serial" )
-    private static class FactoryFoundException extends SAXException {
-
-        private Resource.Factory factory;
-
-        public FactoryFoundException( Resource.Factory factory ) {
-            this.factory = factory;
-        }
-
-        public Resource.Factory getFactory() {
-            return factory;
-        }
+        return res;
     }
 
-    protected class ResourceFactoryFinder {
-        private SAXParser saxParser;
-
-        public ResourceFactoryFinder() {
-            SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-            try {
-                saxParser = saxParserFactory.newSAXParser();
-            }
-            catch( ParserConfigurationException e ) {
-                throw new RiseClipseRuntimeException( "RiseClipseResourceSet.ResourceFactoryFinder", e );
-            }
-            catch( SAXException e ) {
-                throw new RiseClipseRuntimeException( "RiseClipseResourceSet.ResourceFactoryFinder", e );
-            }
-        }
-
-        public Resource.Factory findFactoryFor( URI uri ) {
-
-            DefaultHandler defaultHandler = new DefaultHandler() {
-                public void startElement( String uri, String localName, String qName, Attributes attributes )
-                        throws SAXException {
-                    for( int i = 0; i < attributes.getLength(); ++i ) {
-                        String furi = attributes.getURI( i );
-                        if( furi.length() == 0 ) {
-                            furi = attributes.getQName( i );
-                            int dc = furi.indexOf( ':' );
-                            if( dc != -1 ) {
-                                furi = furi.substring( 0, dc );
-                            }
-                        }
-                        if( XMLNS_ATTRIBUTE_NAME.equals( furi ) ) {
-                            String ns = attributes.getValue( i );
-                            if( RiseClipseResourceSet.this.resourceFactories.containsKey( ns )) {
-                                Resource.Factory factory = RiseClipseResourceSet.this.resourceFactories.get( ns );
-                                // Stop parsing and give back result
-                                throw new FactoryFoundException( factory );
-                            }
-                        }
-                    }
-                }
-            };
-
-            try {
-                URIConverter uriConverter = getURIConverter();
-                InputStream inputStream = uriConverter.createInputStream( uri );
-                saxParser.parse( inputStream, defaultHandler );
-            }
-            catch( FactoryFoundException e ) {
-                return e.getFactory();
-            }
-            catch( SAXException e ) {
-                // Not an xml file or any other error : we will use the standard mechanism
-                return null;
-            }
-            catch( IOException e ) {
-                // Not an xml file or any other error : we will use the standard mechanism
-                return null;
-            }
-
-            return null;
-        }
-    }
 }
+
+
