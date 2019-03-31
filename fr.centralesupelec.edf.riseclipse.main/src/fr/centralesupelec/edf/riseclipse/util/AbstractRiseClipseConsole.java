@@ -18,6 +18,9 @@
  */
 package fr.centralesupelec.edf.riseclipse.util;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Base class for RiseClipse consoles.
  * It implements the Singleton design pattern, handle the level of messages
@@ -60,6 +63,11 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
      * The current level of displayed messages
      */
     protected int currentLevel;
+
+    /**
+     * Messages which have been displayed once
+     */
+    private Set< String > displayedMessages;
     
 	/**
 	 * Constructs a new console, using it as the unique one
@@ -98,7 +106,7 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
 	 */
     public final void info( Object o ) {
     	if( currentLevel <= INFO_LEVEL ) {
-    		doOutputMessage( "INFO: " + o.toString() );
+    	    outputMessage( "INFO: " + o.toString() );
     	}
     }
     
@@ -108,7 +116,7 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
 	 */
 	public final void warning( Object o ) {
         if( currentLevel <= WARNING_LEVEL ) {
-    		doOutputMessage( "WARNING: " + o.toString() );
+            outputMessage( "WARNING: " + o.toString() );
         }
     }
     
@@ -118,7 +126,7 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
 	 */
     public final void error( Object o ) {
         if( currentLevel <= ERROR_LEVEL ) {
-    		doOutputMessage( "ERROR: " + o.toString() );
+            outputMessage( "ERROR: " + o.toString() );
         }
     }
     
@@ -127,8 +135,18 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
 	 * then throws a {@link RiseClipseFatalException}
 	 */
     public final void fatal( Object o ) {
-		doOutputMessage( "FATAL: " + o.toString() );
+        outputMessage( "FATAL: " + o.toString() );
 		throw new RiseClipseFatalException(  "FATAL: " + o.toString(), null );
+    }
+    
+    private void outputMessage( String m ) {
+        if( displayedMessages != null ) {
+            if( displayedMessages.contains( m )) {
+                return;
+            }
+            displayedMessages.add( m );
+        }
+        doOutputMessage( m );
     }
 
     /**
@@ -136,5 +154,15 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
      * @param m message to display
      */
     protected abstract void doOutputMessage( String m );
+
+    @Override
+    public void displayIdenticalMessages() {
+        displayedMessages = null;        
+    }
+
+    @Override
+    public void doNotDisplayIdenticalMessages() {
+        displayedMessages = new HashSet< String >();
+    }
     
 }

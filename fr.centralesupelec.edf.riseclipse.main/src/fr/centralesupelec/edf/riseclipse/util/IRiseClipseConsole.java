@@ -78,5 +78,15 @@ public interface IRiseClipseConsole {
 	 */
     public void fatal( Object o );
 
+    /**
+     * All messages will be displayed, even if an identical one has already been displayed
+     */
+    public void displayIdenticalMessages();
+
+    /**
+     * Messages will be displayed only once. An identical one will be ignored
+     */
+    public void doNotDisplayIdenticalMessages();
+
 }
 
