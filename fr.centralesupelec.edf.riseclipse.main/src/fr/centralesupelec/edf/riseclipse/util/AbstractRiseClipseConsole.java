@@ -31,7 +31,32 @@ import java.util.Set;
  */
 public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
 
-	/**
+    // ANSI escape codes for colors
+    private static final String ANSI_RESET = "\u001B[0m";
+    private static final String ANSI_BLACK = "\u001B[30m";
+    private static final String ANSI_RED = "\u001B[31m";
+    //private static final String ANSI_GREEN = "\u001B[32m";
+    private static final String ANSI_YELLOW = "\u001B[33m";
+    private static final String ANSI_BLUE = "\u001B[34m";
+    //private static final String ANSI_PURPLE = "\u001B[35m";
+    private static final String ANSI_CYAN = "\u001B[36m";
+    //private static final String ANSI_WHITE = "\u001B[37m";
+    
+    // Message prefixes
+    private static final String VERBOSE_PREFIX = "VERBOSE: ";
+    private static final String    INFO_PREFIX = "INFO:    ";
+    private static final String WARNING_PREFIX = "WARNING: ";
+    private static final String   ERROR_PREFIX = "ERROR:   ";
+    private static final String   FATAL_PREFIX = "FATAL:   ";
+    
+    // Colored message prefixes
+    private static final String COLORED_VERBOSE_PREFIX = ANSI_CYAN   + VERBOSE_PREFIX + ANSI_RESET;
+    private static final String    COLORED_INFO_PREFIX = ANSI_BLUE   + INFO_PREFIX    + ANSI_RESET;
+    private static final String COLORED_WARNING_PREFIX = ANSI_YELLOW + WARNING_PREFIX + ANSI_RESET;
+    private static final String   COLORED_ERROR_PREFIX = ANSI_RED    + ERROR_PREFIX   + ANSI_RESET;
+    private static final String   COLORED_FATAL_PREFIX = ANSI_BLACK  + FATAL_PREFIX   + ANSI_RESET;
+    
+    /**
 	 * The unique instance of AbstractRiseClipseConsole
 	 */
     protected static IRiseClipseConsole console;
@@ -69,14 +94,31 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
      */
     private Set< String > displayedMessages;
     
-	/**
-	 * Constructs a new console, using it as the unique one
-	 * (the previous one, if any, is forgotten).
-	 * The initial level is set to {@link IRiseClipseConsole#WARNING_LEVEL}
-	 */
-    protected AbstractRiseClipseConsole() {
+    /**
+     * Whether to use color for message prefixes
+     */
+    private boolean useColor;
+    
+    /**
+     * Constructs a new console, using it as the unique one
+     * (the previous one, if any, is forgotten).
+     * The initial level is set to {@link IRiseClipseConsole#WARNING_LEVEL}
+     * Color is used according if argument is true
+     */
+    protected AbstractRiseClipseConsole( boolean useColor ) {
         console = this;
         currentLevel = WARNING_LEVEL;
+        this.useColor = useColor;
+    }
+    
+    /**
+     * Constructs a new console, using it as the unique one
+     * (the previous one, if any, is forgotten).
+     * The initial level is set to {@link IRiseClipseConsole#WARNING_LEVEL}
+     * Color is not used.
+     */
+    protected AbstractRiseClipseConsole() {
+        this( false );
     }
     
     /**
@@ -96,7 +138,12 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
      */
     public final void verbose( Object o ) {
         if( currentLevel <= VERBOSE_LEVEL ) {
-            doOutputMessage( "VERBOSE: " + o.toString() );
+            if( useColor ) {
+                outputMessage( COLORED_VERBOSE_PREFIX + o.toString() );
+            }
+            else {
+                outputMessage( VERBOSE_PREFIX + o.toString() );
+            }
         }
     }
     
@@ -106,7 +153,12 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
 	 */
     public final void info( Object o ) {
     	if( currentLevel <= INFO_LEVEL ) {
-    	    outputMessage( "INFO:    " + o.toString() );
+            if( useColor ) {
+                outputMessage( COLORED_INFO_PREFIX + o.toString() );
+            }
+            else {
+                outputMessage( INFO_PREFIX + o.toString() );
+            }
     	}
     }
     
@@ -116,7 +168,12 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
 	 */
 	public final void warning( Object o ) {
         if( currentLevel <= WARNING_LEVEL ) {
-            outputMessage( "WARNING: " + o.toString() );
+            if( useColor ) {
+                outputMessage( COLORED_WARNING_PREFIX + o.toString() );
+            }
+            else {
+                outputMessage( WARNING_PREFIX + o.toString() );
+            }
         }
     }
     
@@ -126,7 +183,12 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
 	 */
     public final void error( Object o ) {
         if( currentLevel <= ERROR_LEVEL ) {
-            outputMessage( "ERROR:   " + o.toString() );
+            if( useColor ) {
+                outputMessage( COLORED_ERROR_PREFIX + o.toString() );
+            }
+            else {
+                outputMessage( ERROR_PREFIX + o.toString() );
+            }
         }
     }
     
@@ -135,7 +197,12 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
 	 * then throws a {@link RiseClipseFatalException}
 	 */
     public final void fatal( Object o ) {
-        outputMessage( "FATAL:   " + o.toString() );
+        if( useColor ) {
+            outputMessage( COLORED_FATAL_PREFIX + o.toString() );
+        }
+        else {
+            outputMessage( FATAL_PREFIX + o.toString() );
+        }
 		throw new RiseClipseFatalException(  "FATAL: " + o.toString(), null );
     }
     
