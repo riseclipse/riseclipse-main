@@ -106,7 +106,7 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
 	 */
     public final void info( Object o ) {
     	if( currentLevel <= INFO_LEVEL ) {
-    	    outputMessage( "INFO: " + o.toString() );
+    	    outputMessage( "INFO:    " + o.toString() );
     	}
     }
     
@@ -126,7 +126,7 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
 	 */
     public final void error( Object o ) {
         if( currentLevel <= ERROR_LEVEL ) {
-            outputMessage( "ERROR: " + o.toString() );
+            outputMessage( "ERROR:   " + o.toString() );
         }
     }
     
@@ -135,7 +135,7 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
 	 * then throws a {@link RiseClipseFatalException}
 	 */
     public final void fatal( Object o ) {
-        outputMessage( "FATAL: " + o.toString() );
+        outputMessage( "FATAL:   " + o.toString() );
 		throw new RiseClipseFatalException(  "FATAL: " + o.toString(), null );
     }
     
