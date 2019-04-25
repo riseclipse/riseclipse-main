@@ -25,6 +25,14 @@ package fr.centralesupelec.edf.riseclipse.util;
  *
  */
 public class TextRiseClipseConsole extends AbstractRiseClipseConsole {
+    
+    public TextRiseClipseConsole() {
+        super();
+    }
+
+    public TextRiseClipseConsole( boolean useColor ) {
+        super( useColor );
+    }
 
 	/**
 	 * Output message on System.out
