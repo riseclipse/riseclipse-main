@@ -56,7 +56,7 @@ public abstract class RiseClipseModelLoader {
     }
     
     public Resource load( String name ) {
-        console.verbose( "Loading file " + name + " in RiseCliupse" );
+        console.verbose( "Loading file " + name + " in RiseClipse" );
         
         int currentSize = resourceSet.getResources().size();
         
