@@ -18,10 +18,8 @@
  */
 package fr.centralesupelec.edf.riseclipse.util;
 
-public class RiseClipseResourceSetFactory {
+public interface IRiseClipseResourceSetFactory {
     
-    public IRiseClipseResourceSet createResourceSet( boolean strictContent, IRiseClipseConsole console ) {
-        return new RiseClipseResourceSet( strictContent, console );
-    }
+    public IRiseClipseResourceSet createResourceSet( boolean strictContent, IRiseClipseConsole console );
 
 }
