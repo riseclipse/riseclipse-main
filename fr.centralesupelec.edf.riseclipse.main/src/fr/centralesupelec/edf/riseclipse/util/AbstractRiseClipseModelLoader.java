@@ -32,20 +32,20 @@ import org.eclipse.emf.ecore.xmi.IllegalValueException;
 import fr.centralesupelec.edf.riseclipse.util.IRiseClipseConsole;
 
 
-public abstract class RiseClipseModelLoader {
+public abstract class AbstractRiseClipseModelLoader {
     
     protected IRiseClipseResourceSet resourceSet;
     protected IRiseClipseConsole console;
 
-    protected RiseClipseModelLoader( IRiseClipseConsole console ) {
+    protected AbstractRiseClipseModelLoader( IRiseClipseConsole console ) {
         this.console = console;
         
-        reset();
+//        reset();
     }
     
-    public void reset() {
-        this.resourceSet = new RiseClipseResourceSet( true, console );
-    }
+//    public void reset() {
+//        this.resourceSet = new AbstractRiseClipseResourceSet( true, console );
+//    }
     
     public void reset( IRiseClipseResourceSet resourceSet ) {
         this.resourceSet = resourceSet;
@@ -94,7 +94,7 @@ public abstract class RiseClipseModelLoader {
                 @SuppressWarnings("unused")
                 Resource resource = resourceSet.getResource( resourceURI, true );
             }
-            // This is done by RiseClipseModelLoader in the command line tool 
+            // This is done by AbstractRiseClipseModelLoader in the command line tool 
             catch( RuntimeException re ) {
                 Throwable cause = re.getCause();
                 if( cause instanceof IllegalValueException ) {

@@ -32,7 +32,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
  * @author Dominique Marcadet
  *
  */
-public class RiseClipseResourceSet extends ResourceSetImpl implements IRiseClipseResourceSet {
+public abstract class AbstractRiseClipseResourceSet extends ResourceSetImpl implements IRiseClipseResourceSet {
 
     protected IRiseClipseConsole console;
     // If true, only IRiseClipseResource can be added
@@ -51,7 +51,7 @@ public class RiseClipseResourceSet extends ResourceSetImpl implements IRiseClips
     // a getResource().
     private boolean callFinalizeLoadAfterGetResource;
 
-    public RiseClipseResourceSet( boolean strictContent, IRiseClipseConsole console ) {
+    public AbstractRiseClipseResourceSet( boolean strictContent, IRiseClipseConsole console ) {
         this.console = console;
         this.strictContent = strictContent;
         this.callFinalizeLoadAfterGetResource = false;
@@ -97,7 +97,7 @@ public class RiseClipseResourceSet extends ResourceSetImpl implements IRiseClips
         Resource res = super.getResource( uri, loadOnDemand );
         // createResource has been called before, so check is useless
 //        if(( res != null ) && strictContent && ( ! ( res instanceof IRiseClipseResource ))) {
-//            throw new RiseClipseFatalException( "RiseClipseResourceSet.getResource(): not an IRiseClipseResource", null );
+//            throw new RiseClipseFatalException( "AbstractRiseClipseResourceSet.getResource(): not an IRiseClipseResource", null );
 //        }
         
         if( callFinalizeLoadAfterGetResource && ( res instanceof IRiseClipseResource )) {
@@ -113,7 +113,7 @@ public class RiseClipseResourceSet extends ResourceSetImpl implements IRiseClips
     public Resource createResource( URI uri, String contentType ) {
         Resource res = super.createResource( uri, contentType );
         if(( res != null ) && strictContent && ( ! ( res instanceof IRiseClipseResource ))) {
-            throw new RiseClipseFatalException( "RiseClipseResourceSet.getResource(): not an IRiseClipseResource", null );
+            throw new RiseClipseFatalException( "AbstractRiseClipseResourceSet.getResource(): not an IRiseClipseResource", null );
         }
         return res;
     }
