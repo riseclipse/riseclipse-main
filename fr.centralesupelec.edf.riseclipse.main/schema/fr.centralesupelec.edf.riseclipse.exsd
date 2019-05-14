@@ -84,7 +84,7 @@
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":org.eclipse.emf.ecore.resource.Resource$Factory"/>
+                  <meta.attribute kind="java" basedOn=":fr.centralesupelec.edf.riseclipse.util.IRiseClipseResourceFactory"/>
                </appinfo>
             </annotation>
          </attribute>
@@ -104,7 +104,7 @@
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn="fr.centralesupelec.edf.riseclipse.util.RiseClipseResourceSetFactory:"/>
+                  <meta.attribute kind="java" basedOn=":fr.centralesupelec.edf.riseclipse.util.IRiseClipseResourceSetFactory"/>
                </appinfo>
             </annotation>
          </attribute>
