@@ -18,6 +18,8 @@
  */
 package fr.centralesupelec.edf.riseclipse.util;
 
+import java.util.Optional;
+
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -64,16 +66,12 @@ public abstract class AbstractRiseClipseResourceSet extends ResourceSetImpl impl
 
     @Override
     public void printStatistics( IRiseClipseConsole console ) {
-        for( IRiseClipseResource r : getRiseClipseResources() ) {
-            r.printStatistics( console );
-        }
+        getRiseClipseResources().stream().forEach( r -> r.printStatistics( console ) );
     }
 
     @Override
     public void finalizeLoad( IRiseClipseConsole console ) {
-        for( IRiseClipseResource r : getRiseClipseResources() ) {
-            r.finalizeLoad( console );
-        }
+        getRiseClipseResources().stream().forEach( r -> r.finalizeLoad( console ) );
     }
 
     public EList< IRiseClipseResource > getRiseClipseResources() {
@@ -95,10 +93,6 @@ public abstract class AbstractRiseClipseResourceSet extends ResourceSetImpl impl
     @Override
     public Resource getResource( URI uri, boolean loadOnDemand ) {
         Resource res = super.getResource( uri, loadOnDemand );
-        // createResource has been called before, so check is useless
-//        if(( res != null ) && strictContent && ( ! ( res instanceof IRiseClipseResource ))) {
-//            throw new RiseClipseFatalException( "AbstractRiseClipseResourceSet.getResource(): not an IRiseClipseResource", null );
-//        }
         
         if( callFinalizeLoadAfterGetResource && ( res instanceof IRiseClipseResource )) {
             finalizeLoad( console );
@@ -111,12 +105,21 @@ public abstract class AbstractRiseClipseResourceSet extends ResourceSetImpl impl
      */
     @Override
     public Resource createResource( URI uri, String contentType ) {
-        Resource res = super.createResource( uri, contentType );
-        if(( res != null ) && strictContent && ( ! ( res instanceof IRiseClipseResource ))) {
-            throw new RiseClipseFatalException( "AbstractRiseClipseResourceSet.getResource(): not an IRiseClipseResource", null );
+        Resource res = null;
+        Optional< String > metamodelName = RiseClipseMetamodel.findMetamodelFor( uri );
+        if( metamodelName.isPresent() ) {
+            res = createRiseClipseResource( uri, contentType );
+        }
+        if(( res == null ) && ! strictContent ) {
+            res = super.createResource( uri, contentType );
+        }
+        if( res != null ) {
+            getResources().add( res );
         }
         return res;
     }
+
+    protected abstract IRiseClipseResource createRiseClipseResource( URI uri, String contentType );
 
 }
 
