@@ -35,17 +35,9 @@ import fr.centralesupelec.edf.riseclipse.util.IRiseClipseConsole;
 public abstract class AbstractRiseClipseModelLoader {
     
     protected IRiseClipseResourceSet resourceSet;
-    protected IRiseClipseConsole console;
 
-    protected AbstractRiseClipseModelLoader( IRiseClipseConsole console ) {
-        this.console = console;
-        
-//        reset();
+    protected AbstractRiseClipseModelLoader() {
     }
-    
-//    public void reset() {
-//        this.resourceSet = new AbstractRiseClipseResourceSet( true, console );
-//    }
     
     public void reset( IRiseClipseResourceSet resourceSet ) {
         this.resourceSet = resourceSet;
@@ -55,7 +47,7 @@ public abstract class AbstractRiseClipseModelLoader {
         return resourceSet;
     }
     
-    public Resource load( String name ) {
+    public Resource load( String name, IRiseClipseConsole console ) {
         console.verbose( "Loading file " + name + " in RiseClipse" );
         
         int currentSize = resourceSet.getResources().size();
@@ -134,7 +126,7 @@ public abstract class AbstractRiseClipseModelLoader {
         return null;
     }
     
-    public void finalizeLoad() {
+    public void finalizeLoad( IRiseClipseConsole console ) {
         resourceSet.finalizeLoad( console );
     }
 
