@@ -36,7 +36,6 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
  */
 public abstract class AbstractRiseClipseResourceSet extends ResourceSetImpl implements IRiseClipseResourceSet {
 
-    protected IRiseClipseConsole console;
     // If true, only IRiseClipseResource can be added
     protected boolean strictContent;
     
@@ -53,8 +52,7 @@ public abstract class AbstractRiseClipseResourceSet extends ResourceSetImpl impl
     // a getResource().
     private boolean callFinalizeLoadAfterGetResource;
 
-    public AbstractRiseClipseResourceSet( boolean strictContent, IRiseClipseConsole console ) {
-        this.console = console;
+    public AbstractRiseClipseResourceSet( boolean strictContent ) {
         this.strictContent = strictContent;
         this.callFinalizeLoadAfterGetResource = false;
     }
@@ -95,7 +93,7 @@ public abstract class AbstractRiseClipseResourceSet extends ResourceSetImpl impl
         Resource res = super.getResource( uri, loadOnDemand );
         
         if( callFinalizeLoadAfterGetResource && ( res instanceof IRiseClipseResource )) {
-            finalizeLoad( console );
+            finalizeLoad( AbstractRiseClipseConsole.getConsole() );
         }
         return res;
     }

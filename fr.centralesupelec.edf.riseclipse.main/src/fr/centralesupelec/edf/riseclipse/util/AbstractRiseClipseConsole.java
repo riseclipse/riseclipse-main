@@ -21,6 +21,8 @@ package fr.centralesupelec.edf.riseclipse.util;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /**
  * Base class for RiseClipse consoles.
  * It implements the Singleton design pattern, handle the level of messages
@@ -67,7 +69,8 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
      * 
      * @return The unique instance of AbstractRiseClipseConsole
      */
-    public static synchronized IRiseClipseConsole getConsole() {
+    @SuppressWarnings( "null" )
+    public static synchronized @NonNull IRiseClipseConsole getConsole() {
         if( console == null ) {
             console = new TextRiseClipseConsole();
         }
