@@ -134,18 +134,27 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
 		}
 		return previousLevel;
 	}
+	
+	/**
+	 * Utility to create a String by concatenation of Object
+	 */
+	private String toString( Object... objects ) {
+	    StringBuilder s = new StringBuilder();
+	    for( int i = 0; i < objects.length; ++i ) s.append( objects[i].toString() );
+	    return s.toString();
+	}
     
     /**
      * Prefixes message with VERBOSE and delegates to {@link AbstractRiseClipseConsole#doOutputMessage(String)}
      * if current level is {@link #VERBOSE_LEVEL}
      */
-    public final void verbose( Object o ) {
+    public final void verbose( Object... o ) {
         if( currentLevel <= VERBOSE_LEVEL ) {
             if( useColor ) {
-                outputMessage( COLORED_VERBOSE_PREFIX + o.toString() );
+                outputMessage( COLORED_VERBOSE_PREFIX + toString( o ));
             }
             else {
-                outputMessage( VERBOSE_PREFIX + o.toString() );
+                outputMessage( VERBOSE_PREFIX + toString( o ));
             }
         }
     }
@@ -154,13 +163,13 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
 	 * Prefixes message with INFO and delegates to {@link AbstractRiseClipseConsole#doOutputMessage(String)}
 	 * if current level is {@link #INFO_LEVEL} or below
 	 */
-    public final void info( Object o ) {
+    public final void info( Object... o ) {
     	if( currentLevel <= INFO_LEVEL ) {
             if( useColor ) {
-                outputMessage( COLORED_INFO_PREFIX + o.toString() );
+                outputMessage( COLORED_INFO_PREFIX + toString( o ));
             }
             else {
-                outputMessage( INFO_PREFIX + o.toString() );
+                outputMessage( INFO_PREFIX + toString( o ));
             }
     	}
     }
@@ -169,13 +178,13 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
 	 * Prefixes message with WARNING and delegates to {@link AbstractRiseClipseConsole#doOutputMessage(String)}
 	 * if current level is {@link #WARNING_LEVEL} or below
 	 */
-	public final void warning( Object o ) {
+	public final void warning( Object... o ) {
         if( currentLevel <= WARNING_LEVEL ) {
             if( useColor ) {
-                outputMessage( COLORED_WARNING_PREFIX + o.toString() );
+                outputMessage( COLORED_WARNING_PREFIX + toString( o ));
             }
             else {
-                outputMessage( WARNING_PREFIX + o.toString() );
+                outputMessage( WARNING_PREFIX + toString( o ));
             }
         }
     }
@@ -184,13 +193,13 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
 	 * Prefixes message with ERROR and delegates to {@link AbstractRiseClipseConsole#doOutputMessage(String)}
 	 * if current level is {@link #ERROR_LEVEL} or below
 	 */
-    public final void error( Object o ) {
+    public final void error( Object... o ) {
         if( currentLevel <= ERROR_LEVEL ) {
             if( useColor ) {
-                outputMessage( COLORED_ERROR_PREFIX + o.toString() );
+                outputMessage( COLORED_ERROR_PREFIX + toString( o ));
             }
             else {
-                outputMessage( ERROR_PREFIX + o.toString() );
+                outputMessage( ERROR_PREFIX + toString( o ));
             }
         }
     }
@@ -199,14 +208,14 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
 	 * Prefixes message with FATAL and delegates to {@link AbstractRiseClipseConsole#doOutputMessage(String)},
 	 * then throws a {@link RiseClipseFatalException}
 	 */
-    public final void fatal( Object o ) {
+    public final void fatal( Object... o ) {
         if( useColor ) {
-            outputMessage( COLORED_FATAL_PREFIX + o.toString() );
+            outputMessage( COLORED_FATAL_PREFIX + toString( o ));
         }
         else {
-            outputMessage( FATAL_PREFIX + o.toString() );
+            outputMessage( FATAL_PREFIX + toString( o ));
         }
-		throw new RiseClipseFatalException(  "FATAL: " + o.toString(), null );
+		throw new RiseClipseFatalException(  "FATAL: " + toString( o ), null );
     }
     
     private void outputMessage( String m ) {
