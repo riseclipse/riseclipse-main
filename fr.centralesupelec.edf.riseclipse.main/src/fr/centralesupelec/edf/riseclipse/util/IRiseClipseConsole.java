@@ -48,35 +48,35 @@ public interface IRiseClipseConsole {
      * 
      * @param o message to be displayed
      */
-    public void verbose( Object o );
+    public void verbose( Object... o );
 
 	/**
 	 * Output message o.toString() if current level is INFO_LEVEL or below
 	 * 
 	 * @param o message to be displayed
 	 */
-    public void info( Object o );
+    public void info( Object... o );
 
 	/**
 	 * Output message o.toString() if current level is WARNING_LEVEL or below
 	 * 
 	 * @param o message to be displayed
 	 */
-    public void warning( Object o );
+    public void warning( Object... o );
 
 	/**
 	 * Output message o.toString() if current level is ERROR_LEVEL or below
 	 * 
 	 * @param o message to be displayed
 	 */
-    public void error( Object o );
+    public void error( Object... o );
 
 	/**
 	 * Output message o.toString() if current level is FATAL_LEVEL or below
 	 * 
 	 * @param o message to be displayed
 	 */
-    public void fatal( Object o );
+    public void fatal( Object... o );
 
     /**
      * All messages will be displayed, even if an identical one has already been displayed
