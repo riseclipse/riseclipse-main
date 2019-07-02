@@ -148,6 +148,7 @@ public class RiseClipseMetamodel {
                     }
                     if( XMLNS_ATTRIBUTE_NAME.equals( furi ) ) {
                         String ns = attributes.getValue( i );
+                        if( ns.endsWith( "#" )) ns = ns.substring( 0, ns.length() - 1 );
                         if( knownMetamodels.containsKey( ns )) {
                             if( knownMetamodels.get( ns ).getResourceSetFactory().isPresent() ) {
                                 // Stop parsing and give back result
