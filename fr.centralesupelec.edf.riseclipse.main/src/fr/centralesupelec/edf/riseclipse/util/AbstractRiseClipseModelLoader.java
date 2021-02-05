@@ -30,6 +30,7 @@ import java.util.zip.ZipInputStream;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.xmi.IllegalValueException;
+import org.eclipse.emf.ecore.xmi.PackageNotFoundException;
 
 
 
@@ -102,7 +103,15 @@ public abstract class AbstractRiseClipseModelLoader {
                     if( resourceSet.getResources().size() > currentSize ) {
                         resourceSet.getResources().remove( currentSize );
                     }
-                } else if( re instanceof NullPointerException ) {
+                }
+                else if( cause instanceof PackageNotFoundException ) {
+                    // Unknown namespaces are not errors
+                    // This is needed at least for SCL files using specific namespaces in Private elements
+                    // TODO: move this to the specific model loader ?
+                    PackageNotFoundException e = ( PackageNotFoundException ) cause;
+                    console.info( "Elements in the XML namespace " + e.uri() + " are ignored " );
+                }
+                else if( re instanceof NullPointerException ) {
                 	// To get more information and locate the problem
                     console.error( "Problem loading " + resourceURI + " : Null Pointer Exception (see log)");
                     re.printStackTrace();
