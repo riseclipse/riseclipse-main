@@ -1,6 +1,6 @@
 /*
 *************************************************************************
-**  Copyright (c) 2016-2021 CentraleSupélec & EDF.
+**  Copyright (c) 2016-2022 CentraleSupélec & EDF.
 **  All rights reserved. This program and the accompanying materials
 **  are made available under the terms of the Eclipse Public License v2.0
 **  which accompanies this distribution, and is available at
@@ -20,6 +20,8 @@
 */
 package fr.centralesupelec.edf.riseclipse.util;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /**
  * This class is for fatal exceptions in RiseClipse, they must
  * not be caught.
@@ -31,7 +33,7 @@ public class RiseClipseFatalException extends RiseClipseRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	public RiseClipseFatalException( String error, Exception e ) {
+	public RiseClipseFatalException( @NonNull String error, Exception e ) {
 		super( error, e );
 	}
 
