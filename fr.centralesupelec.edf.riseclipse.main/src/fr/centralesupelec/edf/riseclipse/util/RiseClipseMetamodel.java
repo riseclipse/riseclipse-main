@@ -1,6 +1,6 @@
 /*
 *************************************************************************
-**  Copyright (c) 2016-2021 CentraleSupélec & EDF.
+**  Copyright (c) 2016-2022 CentraleSupélec & EDF.
 **  All rights reserved. This program and the accompanying materials
 **  are made available under the terms of the Eclipse Public License v2.0
 **  which accompanies this distribution, and is available at
@@ -50,6 +50,8 @@ public class RiseClipseMetamodel {
     private static       SAXParser saxParser;
     private static final URIConverter uriConverter = new ExtensibleURIConverterImpl();
     
+    private static final String Category = "RiseClipse/Metamodel";
+    
     static {
         SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
         try {
@@ -63,7 +65,7 @@ public class RiseClipseMetamodel {
         }
     }
 
-    public static void loadKnownMetamodels( IRiseClipseConsole console ) {
+    public static void loadKnownMetamodels( @NonNull IRiseClipseConsole console ) {
         IConfigurationElement[] contributions = Platform.getExtensionRegistry().getConfigurationElementsFor(
                 "fr.centralesupelec.edf.riseclipse.main.meta_models" );
         for( int i = 0; i < contributions.length; i++ ) {
@@ -107,11 +109,11 @@ public class RiseClipseMetamodel {
                 }
             }
             catch( CoreException e ) {
-                console.error( "Metamodel with uri " + uri + " has invalid factories.");
+                console.error( Category, 0, "Metamodel with uri " + uri + " has invalid factories." );
                 continue;
             }
             if( knownMetamodels.get( uri ) == null ) {
-                console.info( "Added metamodel " + name + " for URI " + uri );
+                console.info( Category, 0, "Added metamodel " + name + " for URI " + uri );
             }
             knownMetamodels.put( uri, new RiseClipseMetamodel( name, newAdapterFactory,
                     newResourceFactory, newResourceSetFactory, newViewerFilter ));
@@ -121,18 +123,18 @@ public class RiseClipseMetamodel {
     @SuppressWarnings( "serial" )
     private static class MetamodelFoundException extends SAXException {
 
-        private String ns;
+        private @NonNull String ns;
 
-        public MetamodelFoundException( String ns ) {
+        public MetamodelFoundException( @NonNull String ns ) {
             this.ns = ns;
         }
 
-        public String getMetamodel() {
+        public @NonNull String getMetamodel() {
             return ns;
         }
     }
 
-    public static Optional< String > findMetamodelFor( URI resourceURI ) {
+    public static Optional< String > findMetamodelFor( @NonNull URI resourceURI ) {
 
 
        DefaultHandler defaultHandler = new DefaultHandler() {
@@ -186,12 +188,12 @@ public class RiseClipseMetamodel {
         return Optional.ofNullable( res );
     }
     
-    public static boolean isKnown( String metamodelURI ) {
+    public static boolean isKnown( @NonNull String metamodelURI ) {
         // The resourceSetFactory is the criteria for a known metamodel
         return knownMetamodels.containsKey( metamodelURI ) && knownMetamodels.get( metamodelURI ).getResourceSetFactory().isPresent();
     }
     
-    public static Optional< RiseClipseMetamodel > getMetamodel( String metamodelURI ) {
+    public static Optional< RiseClipseMetamodel > getMetamodel( @NonNull String metamodelURI ) {
         if( isKnown( metamodelURI )) {
             return Optional.ofNullable( knownMetamodels.get( metamodelURI ));
         }
