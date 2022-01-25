@@ -20,8 +20,10 @@
 */
 package fr.centralesupelec.edf.riseclipse.util;
 
+import java.util.EnumMap;
 import java.util.Formatter;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -37,29 +39,23 @@ import org.eclipse.jdt.annotation.NonNull;
 public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
 
     // ANSI escape codes for colors
-//    private static final String ANSI_RESET    = "\u001B[0m";
-//    private static final String ANSI_BLACK    = "\u001B[30m";
-//    private static final String ANSI_RED      = "\u001B[31m";
-//    //private static final String ANSI_GREEN  = "\u001B[32m";
-//    private static final String ANSI_YELLOW   = "\u001B[33m";
-//    private static final String ANSI_BLUE     = "\u001B[34m";
-//    //private static final String ANSI_PURPLE = "\u001B[35m";
-//    private static final String ANSI_CYAN     = "\u001B[36m";
-//    //private static final String ANSI_WHITE  = "\u001B[37m";
+    private static final String ANSI_RESET    = "\u001B[0m";
+    private static final String ANSI_BLACK    = "\u001B[30m";
+    private static final String ANSI_RED      = "\u001B[31m";
+    //private static final String ANSI_GREEN  = "\u001B[32m";
+    private static final String ANSI_YELLOW   = "\u001B[33m";
+    private static final String ANSI_BLUE     = "\u001B[34m";
+    //private static final String ANSI_PURPLE = "\u001B[35m";
+    private static final String ANSI_CYAN     = "\u001B[36m";
+    //private static final String ANSI_WHITE  = "\u001B[37m";
     
-    // Message prefixes
-//    private static final String VERBOSE_PREFIX = "VERBOSE: ";
-//    private static final String    INFO_PREFIX = "INFO:    ";
-//    private static final String WARNING_PREFIX = "WARNING: ";
-//    private static final String   ERROR_PREFIX = "ERROR:   ";
-//    private static final String   FATAL_PREFIX = "FATAL:   ";
-    
-    // Colored message prefixes
-//    private static final String COLORED_VERBOSE_PREFIX = ANSI_CYAN   + VERBOSE_PREFIX + ANSI_RESET;
-//    private static final String    COLORED_INFO_PREFIX = ANSI_BLUE   + INFO_PREFIX    + ANSI_RESET;
-//    private static final String COLORED_WARNING_PREFIX = ANSI_YELLOW + WARNING_PREFIX + ANSI_RESET;
-//    private static final String   COLORED_ERROR_PREFIX = ANSI_RED    + ERROR_PREFIX   + ANSI_RESET;
-//    private static final String   COLORED_FATAL_PREFIX = ANSI_BLACK  + FATAL_PREFIX   + ANSI_RESET;
+    private EnumMap< Severity, String > severityColors
+            = new EnumMap<>( Map.of( Severity.VERBOSE, ANSI_CYAN,
+                                     Severity.INFO   , ANSI_BLUE,
+                                     Severity.WARNING, ANSI_YELLOW,
+                                     Severity.ERROR  , ANSI_RED,
+                                     Severity.FATAL  , ANSI_BLACK
+                    ));
     
     /**
      * The unique instance of AbstractRiseClipseConsole
@@ -99,7 +95,7 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
      *   $6 is the color start prefix
      *   $7 is the color end prefix
      */
-    private @NonNull String formatString = "%1$-7s: [%2$s] %4$s at line %3$d";
+    private @NonNull String formatString = "%6$s%1$-7s%7$s: [%2$s] %4$s (%5$s:%3$d)";
     
     @Override
     public @NonNull String getFormatString() {
@@ -113,8 +109,6 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
         return oldFormat;
     }
 
-    //    private String coloredFormatString = "$6s%1$7s$7s: [$2s] $4s at line $3d";
-    
     /**
      * Whether to use color for message prefixes
      */
@@ -168,13 +162,17 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
     public void output( @NonNull RiseClipseMessage message ) {
         if( currentLevel.compareTo( message.getSeverity() ) <= 0 ) {
             Formatter formatter = new Formatter();
-            String m = formatter.format(
+            formatter.format(
                     formatString,
                     message.getSeverity(),
                     message.getCategory(),
                     message.getLineNumber(),
-                    message.getMessage()
-            ).toString();
+                    message.getMessage(),
+                    message.getFilename() == null ? "" : message.getFilename(),
+                    useColor ? severityColors.get( message.getSeverity() ) : "",
+                    useColor ? ANSI_RESET                                  : ""
+            );
+            String m = formatter.toString();
             formatter.close();
             if( displayedMessages != null ) {
                 if( displayedMessages.contains( m )) {

@@ -61,6 +61,8 @@ public interface IRiseClipseConsole {
      *   $3 is lineNumber
      *   $4 is message
      *   $5 is filename 
+     *   $6 is the color start prefix
+     *   $7 is the color end prefix
      * 
      * @param formatString string to use for formatting messages
      * @return             the previous format string
