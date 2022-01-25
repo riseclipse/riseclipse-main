@@ -1,6 +1,6 @@
 /*
 *************************************************************************
-**  Copyright (c) 2016-2021 CentraleSupélec & EDF.
+**  Copyright (c) 2016-2022 CentraleSupélec & EDF.
 **  All rights reserved. This program and the accompanying materials
 **  are made available under the terms of the Eclipse Public License v2.0
 **  which accompanies this distribution, and is available at
@@ -20,75 +20,184 @@
 */
 package fr.centralesupelec.edf.riseclipse.util;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /**
  * Interface for outputting messages to users.
- * It defines four increasing levels of messages and allows
- * for choosing the minimal level of displayed messages.
+ * It allows for choosing the minimal level of displayed messages.
  *  
  * @author Dominique Marcadet
  *
  */
 public interface IRiseClipseConsole {
 	
-    public final static int VERBOSE_LEVEL = 1;
-	public final static int INFO_LEVEL = 2;
-	public final static int WARNING_LEVEL = 3;
-	public final static int ERROR_LEVEL = 4;
-	public final static int FATAL_LEVEL = 5;
-	
-	/**
-	 * Set the current level of displayed messages.
-	 * 
-	 * @param level minimal level of messages to be displayed,
-	 *              ignored if outside [VERBOSE_LEVEL..FATAL_LEVEL]
-	 * @return the previous level
-	 */
-	public int setLevel( int level );
+    /**
+     * Get the current level of displayed messages.
+     * 
+     * @return the current level
+     */
+    @NonNull Severity getLevel();
     
     /**
-     * Output message o.toString() if current level is VERBOSE_LEVEL
+     * Set the current level of displayed messages.
+     * 
+     * @param level minimal level of messages to be displayed
+     * @return the previous level
+     */
+    @NonNull Severity setLevel( @NonNull Severity level );
+    
+    /**
+     * Get the current string used for formatting messages.
+     * 
+     * @return the current format string
+     */
+    @NonNull String getFormatString();
+    
+    /**
+     * Set the string used for formatting messages.
+     * This string will be given to a java.util.Formatter with the following argument positions: 
+     *   1$ is severity
+     *   2$ is category
+     *   $3 is lineNumber
+     *   $4 is message
+     *   $5 is filename 
+     * 
+     * @param formatString string to use for formatting messages
+     * @return             the previous format string
+     */
+    @NonNull String setFormatString( @NonNull String formatString );
+    
+    /**
+     * Output category, line and messageParts if current level is VERBOSE
+     * 
+     * @param category     category of the message
+     * @param lineNumber   line number corresponding to the information indicated by the message
+     * @param messageParts parts of the message to be displayed
+     */
+    default void verbose( @NonNull String category, int lineNumber, @NonNull Object... messageParts ) {
+        output( RiseClipseMessage.verbose( category, lineNumber, messageParts ));
+    }
+
+    /**
+     * Output category, filename, line and messageParts if current level is VERBOSE
+     * 
+     * @param category     category of the message
+     * @param filename     filename corresponding to the information indicated by the message
+     * @param lineNumber   line number corresponding to the information indicated by the message
+     * @param messageParts parts of the message to be displayed
+     */
+    default void verbose( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
+        output( RiseClipseMessage.verbose( category, filename, lineNumber, messageParts ));
+    }
+
+    /**
+     * Output Output category, line and messageParts if current level is INFO or below
+     * 
+     * @param category     category of the message
+     * @param lineNumber   line number corresponding to the information indicated by the message
+     * @param messageParts parts of the message to be displayed
+     */
+    default void info( @NonNull String category, int lineNumber, @NonNull Object... messageParts ) {
+        output( RiseClipseMessage.info( category, lineNumber, messageParts ));
+    }
+
+    /**
+     * Output category, filename, line and messageParts if current level is INFO or below
+     * 
+     * @param category     category of the message
+     * @param filename     filename corresponding to the information indicated by the message
+     * @param lineNumber   line number corresponding to the information indicated by the message
+     * @param messageParts parts of the message to be displayed
+     */
+    default void info( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
+        output( RiseClipseMessage.info( category, filename, lineNumber, messageParts ));
+    }
+
+    /**
+     * Output category, line and messageParts if current level is WARNING or below
+     * 
+     * @param category     category of the message
+     * @param lineNumber   line number corresponding to the information indicated by the message
+     * @param messageParts parts of the message to be displayed
+     */
+    default void warning( @NonNull String category, int lineNumber, @NonNull Object... messageParts ) {
+        output( RiseClipseMessage.warning( category, lineNumber, messageParts ));
+    }
+
+    /**
+     * Output category, filename, line and messageParts if current level is WARNING or below
+     * 
+     * @param category     category of the message
+     * @param filename     filename corresponding to the information indicated by the message
+     * @param lineNumber   line number corresponding to the information indicated by the message
+     * @param messageParts parts of the message to be displayed
+     */
+    default void warning( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
+        output( RiseClipseMessage.verbose( category, filename, lineNumber, messageParts ));
+    }
+
+    /**
+     * Output category, line and messageParts if current level is ERROR or below
+     * 
+     * @param category     category of the message
+     * @param lineNumber   line number corresponding to the information indicated by the message
+     * @param messageParts parts of the message to be displayed
+     */
+    default void error( @NonNull String category, int lineNumber, @NonNull Object... messageParts ) {
+        output( RiseClipseMessage.error( category, lineNumber, messageParts ));
+    }
+
+    /**
+     * Output category, filename, line and messageParts if current level is ERROR or below
+     * 
+     * @param category     category of the message
+     * @param filename     filename corresponding to the information indicated by the message
+     * @param lineNumber   line number corresponding to the information indicated by the message
+     * @param messageParts parts of the message to be displayed
+     */
+    default void error( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
+        output( RiseClipseMessage.verbose( category, filename, lineNumber, messageParts ));
+    }
+
+    /**
+     * Output category, line and messageParts if current level is FATAL or below
+     * 
+     * @param category     category of the message
+     * @param lineNumber   line number corresponding to the information indicated by the message
+     * @param messageParts parts of the message to be displayed
+     */
+    default void fatal( @NonNull String category, int lineNumber, @NonNull Object... messageParts ) {
+        output( RiseClipseMessage.fatal( category, lineNumber, messageParts ));
+    }
+
+    /**
+     * Output category, filename, line and messageParts if current level is FATAL or below
+     * 
+     * @param category     category of the message
+     * @param filename     filename corresponding to the information indicated by the message
+     * @param lineNumber   line number corresponding to the information indicated by the message
+     * @param messageParts parts of the message to be displayed
+     */
+    default void fatal( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
+        output( RiseClipseMessage.verbose( category, filename, lineNumber, messageParts ));
+    }
+
+    /**
+     * Output message on the console
      * 
      * @param o message to be displayed
      */
-    public void verbose( Object... o );
-
-	/**
-	 * Output message o.toString() if current level is INFO_LEVEL or below
-	 * 
-	 * @param o message to be displayed
-	 */
-    public void info( Object... o );
-
-	/**
-	 * Output message o.toString() if current level is WARNING_LEVEL or below
-	 * 
-	 * @param o message to be displayed
-	 */
-    public void warning( Object... o );
-
-	/**
-	 * Output message o.toString() if current level is ERROR_LEVEL or below
-	 * 
-	 * @param o message to be displayed
-	 */
-    public void error( Object... o );
-
-	/**
-	 * Output message o.toString() if current level is FATAL_LEVEL or below
-	 * 
-	 * @param o message to be displayed
-	 */
-    public void fatal( Object... o );
+    void output( @NonNull RiseClipseMessage message );
 
     /**
      * All messages will be displayed, even if an identical one has already been displayed
      */
-    public void displayIdenticalMessages();
+    void displayIdenticalMessages();
 
     /**
      * Messages will be displayed only once. An identical one will be ignored
      */
-    public void doNotDisplayIdenticalMessages();
+    void doNotDisplayIdenticalMessages();
 
 }
 
