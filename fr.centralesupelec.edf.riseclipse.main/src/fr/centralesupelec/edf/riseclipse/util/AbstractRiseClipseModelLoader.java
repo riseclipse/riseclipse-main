@@ -91,14 +91,13 @@ public abstract class AbstractRiseClipseModelLoader {
                 @SuppressWarnings( "unused" )
                 Resource resource = resourceSet.getResource( resourceURI, true );
             }
-            // This is done by AbstractRiseClipseModelLoader in the command line tool 
             catch( RuntimeException re ) {
                 Throwable cause = re.getCause();
                 if( cause instanceof IllegalValueException ) {
                     IllegalValueException e = ( IllegalValueException ) cause;
-                    console.error( Category, 0, 
-                            "value " + e.getValue() + " is not legal at line " + e.getLine() + " for feature "
-                            + e.getFeature().getName() + ", it should be " + e.getFeature().getEType().getInstanceTypeName() );
+                    console.error( Category, e.getLine(), 
+                            "value " + e.getValue() + " is not legal for feature "
+                            + e.getFeature().getName() + ", it should be a value of " + e.getFeature().getEType().getName() );
                 }
                 else if( cause instanceof FileNotFoundException ) {
                     console.error( Category, 0, "Problem loading " + resourceURI + " : file not found" );
