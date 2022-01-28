@@ -23,6 +23,8 @@ package fr.centralesupelec.edf.riseclipse.util;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -95,7 +97,12 @@ public abstract class AbstractRiseClipseModelLoader {
                 Throwable cause = re.getCause();
                 if( cause instanceof IllegalValueException ) {
                     IllegalValueException e = ( IllegalValueException ) cause;
-                    console.error( MODEL_LOADER_CATEGORY, e.getLine(), 
+                    String filename = null;
+                    try {
+                        filename = Path.of( new java.net.URI( e.getLocation() )).getFileName().toString();
+                    }
+                    catch( URISyntaxException e1 ) {}
+                    console.error( MODEL_LOADER_CATEGORY, filename, e.getLine(),
                             "value " + e.getValue() + " is not legal for feature "
                             + e.getFeature().getName() + ", it should be a value of " + e.getFeature().getEType().getName() );
                 }
