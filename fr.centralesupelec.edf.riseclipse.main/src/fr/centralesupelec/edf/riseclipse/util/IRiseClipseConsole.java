@@ -135,7 +135,7 @@ public interface IRiseClipseConsole {
      * @param messageParts parts of the message to be displayed
      */
     default void warning( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
-        output( RiseClipseMessage.verbose( category, filename, lineNumber, messageParts ));
+        output( RiseClipseMessage.warning( category, filename, lineNumber, messageParts ));
     }
 
     /**
@@ -158,7 +158,7 @@ public interface IRiseClipseConsole {
      * @param messageParts parts of the message to be displayed
      */
     default void error( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
-        output( RiseClipseMessage.verbose( category, filename, lineNumber, messageParts ));
+        output( RiseClipseMessage.error( category, filename, lineNumber, messageParts ));
     }
 
     /**
@@ -181,7 +181,7 @@ public interface IRiseClipseConsole {
      * @param messageParts parts of the message to be displayed
      */
     default void fatal( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
-        output( RiseClipseMessage.verbose( category, filename, lineNumber, messageParts ));
+        output( RiseClipseMessage.fatal( category, filename, lineNumber, messageParts ));
     }
 
     /**
