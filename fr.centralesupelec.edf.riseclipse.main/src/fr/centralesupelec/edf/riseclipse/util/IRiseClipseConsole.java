@@ -70,87 +70,99 @@ public interface IRiseClipseConsole {
     @NonNull String setFormatString( @NonNull String formatString );
     
     /**
-     * Output category, line and messageParts if current level is VERBOSE
+     * Output category, line and messageParts, and exits
      * 
      * @param category     category of the message
      * @param lineNumber   line number corresponding to the information indicated by the message
      * @param messageParts parts of the message to be displayed
      */
-    default void verbose( @NonNull String category, int lineNumber, @NonNull Object... messageParts ) {
-        output( RiseClipseMessage.verbose( category, lineNumber, messageParts ));
+    default void emergency( @NonNull String category, int lineNumber, @NonNull Object... messageParts ) {
+        output( RiseClipseMessage.emergency( category, lineNumber, messageParts ));
+        System.exit( -1 );
     }
 
     /**
-     * Output category, filename, line and messageParts if current level is VERBOSE
-     * 
-     * @param category     category of the message
-     * @param filename     filename corresponding to the information indicated by the message
-     * @param lineNumber   line number corresponding to the information indicated by the message
-     * @param messageParts parts of the message to be displayed
-     */
-    default void verbose( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
-        output( RiseClipseMessage.verbose( category, filename, lineNumber, messageParts ));
-    }
-
-    /**
-     * Output Output category, line and messageParts if current level is INFO or below
-     * 
-     * @param category     category of the message
-     * @param lineNumber   line number corresponding to the information indicated by the message
-     * @param messageParts parts of the message to be displayed
-     */
-    default void info( @NonNull String category, int lineNumber, @NonNull Object... messageParts ) {
-        output( RiseClipseMessage.info( category, lineNumber, messageParts ));
-    }
-
-    /**
-     * Output category, filename, line and messageParts if current level is INFO or below
+     * Output category, filename, line and messageParts, and exits
      * 
      * @param category     category of the message
      * @param filename     filename corresponding to the information indicated by the message
      * @param lineNumber   line number corresponding to the information indicated by the message
      * @param messageParts parts of the message to be displayed
      */
-    default void info( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
-        output( RiseClipseMessage.info( category, filename, lineNumber, messageParts ));
+    default void emergency( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
+        output( RiseClipseMessage.emergency( category, filename, lineNumber, messageParts ));
+        System.exit( -1 );
     }
 
     /**
-     * Output category, line and messageParts if current level is WARNING or below
+     * Output category, line and messageParts if current level is ALERT or below
      * 
      * @param category     category of the message
      * @param lineNumber   line number corresponding to the information indicated by the message
      * @param messageParts parts of the message to be displayed
      */
-    default void warning( @NonNull String category, int lineNumber, @NonNull Object... messageParts ) {
-        output( RiseClipseMessage.warning( category, lineNumber, messageParts ));
+    default void alert( @NonNull String category, int lineNumber, @NonNull Object... messageParts ) {
+        if( Severity.ALERT.compareTo( getLevel() ) <= 0 ) {
+            output( RiseClipseMessage.alert( category, lineNumber, messageParts ));
+        }
     }
 
     /**
-     * Output category, filename, line and messageParts if current level is WARNING or below
+     * Output category, filename, line and messageParts if current level is ALERT or above
      * 
      * @param category     category of the message
      * @param filename     filename corresponding to the information indicated by the message
      * @param lineNumber   line number corresponding to the information indicated by the message
      * @param messageParts parts of the message to be displayed
      */
-    default void warning( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
-        output( RiseClipseMessage.warning( category, filename, lineNumber, messageParts ));
+    default void alert( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
+        if( Severity.ALERT.compareTo( getLevel() ) <= 0 ) {
+            output( RiseClipseMessage.alert( category, filename, lineNumber, messageParts ));
+        }
     }
 
     /**
-     * Output category, line and messageParts if current level is ERROR or below
+     * Output category, line and messageParts if current level is CRITICAL or below
+     * 
+     * @param category     category of the message
+     * @param lineNumber   line number corresponding to the information indicated by the message
+     * @param messageParts parts of the message to be displayed
+     */
+    default void critical( @NonNull String category, int lineNumber, @NonNull Object... messageParts ) {
+        if( Severity.CRITICAL.compareTo( getLevel() ) <= 0 ) {
+            output( RiseClipseMessage.critical( category, lineNumber, messageParts ));
+        }
+    }
+
+    /**
+     * Output category, filename, line and messageParts if current level is CRITICAL or above
+     * 
+     * @param category     category of the message
+     * @param filename     filename corresponding to the information indicated by the message
+     * @param lineNumber   line number corresponding to the information indicated by the message
+     * @param messageParts parts of the message to be displayed
+     */
+    default void critical( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
+        if( Severity.CRITICAL.compareTo( getLevel() ) <= 0 ) {
+            output( RiseClipseMessage.critical( category, filename, lineNumber, messageParts ));
+        }
+    }
+
+    /**
+     * Output category, line and messageParts if current level is ERROR or above
      * 
      * @param category     category of the message
      * @param lineNumber   line number corresponding to the information indicated by the message
      * @param messageParts parts of the message to be displayed
      */
     default void error( @NonNull String category, int lineNumber, @NonNull Object... messageParts ) {
-        output( RiseClipseMessage.error( category, lineNumber, messageParts ));
+        if( Severity.ERROR.compareTo( getLevel() ) <= 0 ) {
+            output( RiseClipseMessage.error( category, lineNumber, messageParts ));
+        }
     }
 
     /**
-     * Output category, filename, line and messageParts if current level is ERROR or below
+     * Output category, filename, line and messageParts if current level is ERROR or above
      * 
      * @param category     category of the message
      * @param filename     filename corresponding to the information indicated by the message
@@ -158,30 +170,117 @@ public interface IRiseClipseConsole {
      * @param messageParts parts of the message to be displayed
      */
     default void error( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
-        output( RiseClipseMessage.error( category, filename, lineNumber, messageParts ));
+        if( Severity.ERROR.compareTo( getLevel() ) <= 0 ) {
+            output( RiseClipseMessage.error( category, filename, lineNumber, messageParts ));
+        }
     }
 
     /**
-     * Output category, line and messageParts if current level is FATAL or below
+     * Output category, line and messageParts if current level is WARNING or above
      * 
      * @param category     category of the message
      * @param lineNumber   line number corresponding to the information indicated by the message
      * @param messageParts parts of the message to be displayed
      */
-    default void fatal( @NonNull String category, int lineNumber, @NonNull Object... messageParts ) {
-        output( RiseClipseMessage.fatal( category, lineNumber, messageParts ));
+    default void warning( @NonNull String category, int lineNumber, @NonNull Object... messageParts ) {
+        if( Severity.WARNING.compareTo( getLevel() ) <= 0 ) {
+            output( RiseClipseMessage.warning( category, lineNumber, messageParts ));
+        }
     }
 
     /**
-     * Output category, filename, line and messageParts if current level is FATAL or below
+     * Output category, filename, line and messageParts if current level is WARNING or above
      * 
      * @param category     category of the message
      * @param filename     filename corresponding to the information indicated by the message
      * @param lineNumber   line number corresponding to the information indicated by the message
      * @param messageParts parts of the message to be displayed
      */
-    default void fatal( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
-        output( RiseClipseMessage.fatal( category, filename, lineNumber, messageParts ));
+    default void warning( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
+        if( Severity.WARNING.compareTo( getLevel() ) <= 0 ) {
+            output( RiseClipseMessage.warning( category, filename, lineNumber, messageParts ));
+        }
+    }
+
+    /**
+     * Output Output category, line and messageParts if current level is NOTICE or above
+     * 
+     * @param category     category of the message
+     * @param lineNumber   line number corresponding to the information indicated by the message
+     * @param messageParts parts of the message to be displayed
+     */
+    default void notice( @NonNull String category, int lineNumber, @NonNull Object... messageParts ) {
+        if( Severity.NOTICE.compareTo( getLevel() ) <= 0 ) {
+            output( RiseClipseMessage.notice( category, lineNumber, messageParts ));
+        }
+    }
+
+    /**
+     * Output category, filename, line and messageParts if current level is NOTICE or above
+     * 
+     * @param category     category of the message
+     * @param filename     filename corresponding to the information indicated by the message
+     * @param lineNumber   line number corresponding to the information indicated by the message
+     * @param messageParts parts of the message to be displayed
+     */
+    default void notice( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
+        if( Severity.NOTICE.compareTo( getLevel() ) <= 0 ) {
+            output( RiseClipseMessage.notice( category, filename, lineNumber, messageParts ));
+        }
+    }
+
+    /**
+     * Output Output category, line and messageParts if current level is INFO or above
+     * 
+     * @param category     category of the message
+     * @param lineNumber   line number corresponding to the information indicated by the message
+     * @param messageParts parts of the message to be displayed
+     */
+    default void info( @NonNull String category, int lineNumber, @NonNull Object... messageParts ) {
+        if( Severity.INFO.compareTo( getLevel() ) <= 0 ) {
+            output( RiseClipseMessage.info( category, lineNumber, messageParts ));
+        }
+    }
+
+    /**
+     * Output category, filename, line and messageParts if current level is INFO or above
+     * 
+     * @param category     category of the message
+     * @param filename     filename corresponding to the information indicated by the message
+     * @param lineNumber   line number corresponding to the information indicated by the message
+     * @param messageParts parts of the message to be displayed
+     */
+    default void info( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
+        if( Severity.INFO.compareTo( getLevel() ) <= 0 ) {
+            output( RiseClipseMessage.info( category, filename, lineNumber, messageParts ));
+        }
+    }
+
+    /**
+     * Output Output category, line and messageParts if current level is INFO or above
+     * 
+     * @param category     category of the message
+     * @param lineNumber   line number corresponding to the information indicated by the message
+     * @param messageParts parts of the message to be displayed
+     */
+    default void debug( @NonNull String category, int lineNumber, @NonNull Object... messageParts ) {
+        if( Severity.DEBUG.compareTo( getLevel() ) <= 0 ) {
+            output( RiseClipseMessage.debug( category, lineNumber, messageParts ));
+        }
+    }
+
+    /**
+     * Output category, filename, line and messageParts if current level is INFO or above
+     * 
+     * @param category     category of the message
+     * @param filename     filename corresponding to the information indicated by the message
+     * @param lineNumber   line number corresponding to the information indicated by the message
+     * @param messageParts parts of the message to be displayed
+     */
+    default void debug( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
+        if( Severity.DEBUG.compareTo( getLevel() ) <= 0 ) {
+            output( RiseClipseMessage.debug( category, filename, lineNumber, messageParts ));
+        }
     }
 
     /**

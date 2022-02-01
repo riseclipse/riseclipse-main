@@ -21,9 +21,12 @@
 package fr.centralesupelec.edf.riseclipse.util;
 
 public enum Severity {
-    VERBOSE,
-    INFO,
-    WARNING,
+    EMERGENCY,
+    ALERT,
+    CRITICAL,
     ERROR,
-    FATAL;
+    WARNING,
+    NOTICE,
+    INFO,
+    DEBUG;
 }

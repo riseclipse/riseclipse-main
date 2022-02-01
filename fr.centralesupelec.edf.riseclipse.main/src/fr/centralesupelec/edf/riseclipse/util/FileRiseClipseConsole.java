@@ -42,7 +42,7 @@ public class FileRiseClipseConsole extends AbstractRiseClipseConsole {
             writer = new PrintWriter( name );
         }
         catch( IOException e ) {
-            throw new RiseClipseFatalException( "Unable to create file " + name, e );
+            AbstractRiseClipseConsole.getConsole().emergency( "RiseClipse", 0, "Unable to create file ", name, ", got exception ", e );
         }
     }
 

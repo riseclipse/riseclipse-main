@@ -23,8 +23,6 @@ package fr.centralesupelec.edf.riseclipse.util;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -55,7 +53,7 @@ public abstract class AbstractRiseClipseModelLoader {
     }
     
     public Resource load( @NonNull String name, @NonNull IRiseClipseConsole console ) {
-        console.verbose( MODEL_LOADER_CATEGORY, 0, "Loading file " + name + " in RiseClipse" );
+        console.debug( MODEL_LOADER_CATEGORY, 0, "Loading file " + name + " in RiseClipse" );
         
         int currentSize = resourceSet.getResources().size();
         
@@ -71,7 +69,7 @@ public abstract class AbstractRiseClipseModelLoader {
             ZipInputStream in = new ZipInputStream( resourceSet.getURIConverter().createInputStream( resourceURIs.get( 0 )));
             ZipEntry entry = in.getNextEntry();
             if( entry != null ) {
-                console.verbose( MODEL_LOADER_CATEGORY, 0, "Found a zip archived file" );
+                console.info( MODEL_LOADER_CATEGORY, 0, "Found a zip archived file" );
                 String zipURI = resourceURIs.get( 0 ).toString();
                 resourceURIs.clear();
                 while( entry != null ) {
@@ -87,6 +85,7 @@ public abstract class AbstractRiseClipseModelLoader {
         }
         
         for( URI resourceURI : resourceURIs ) {
+            String resourceName = resourceURI.lastSegment();
             try {
                 // Load the resource through the editing domain.
                 //
@@ -97,17 +96,12 @@ public abstract class AbstractRiseClipseModelLoader {
                 Throwable cause = re.getCause();
                 if( cause instanceof IllegalValueException ) {
                     IllegalValueException e = ( IllegalValueException ) cause;
-                    String filename = null;
-                    try {
-                        filename = Path.of( new java.net.URI( e.getLocation() )).getFileName().toString();
-                    }
-                    catch( URISyntaxException e1 ) {}
-                    console.error( MODEL_LOADER_CATEGORY, filename, e.getLine(),
-                            "value " + e.getValue() + " is not legal for feature "
-                            + e.getFeature().getName() + ", it should be a value of " + e.getFeature().getEType().getName() );
+                    console.error( MODEL_LOADER_CATEGORY, resourceName, e.getLine(),
+                            "value ", e.getValue(), " is not legal for feature ",
+                            e.getFeature().getName(), ", it should be a value of ", e.getFeature().getEType().getName() );
                 }
                 else if( cause instanceof FileNotFoundException ) {
-                    console.error( MODEL_LOADER_CATEGORY, 0, "Problem loading " + resourceURI + " : file not found" );
+                    console.error( MODEL_LOADER_CATEGORY, 0, "Problem loading ", resourceName, ": file not found" );
                     // Resource has been created !
                     // We remove it to return null
                     if( resourceSet.getResources().size() > currentSize ) {
@@ -119,19 +113,19 @@ public abstract class AbstractRiseClipseModelLoader {
                     // This is needed at least for SCL files using specific namespaces in Private elements
                     // TODO: move this to the specific model loader ?
                     PackageNotFoundException e = ( PackageNotFoundException ) cause;
-                    console.info( MODEL_LOADER_CATEGORY, 0, "Elements in the XML namespace " + e.uri() + " are ignored " );
+                    console.notice( MODEL_LOADER_CATEGORY, 0, "Elements in the XML namespace ", e.uri(), " are ignored " );
                 }
                 else if( re instanceof NullPointerException ) {
                 	// To get more information and locate the problem
-                    console.error( MODEL_LOADER_CATEGORY, 0, "Problem loading " + resourceURI + " : Null Pointer Exception (see log)" );
+                    console.error( MODEL_LOADER_CATEGORY, 0, "Problem loading ", resourceName, " : Null Pointer Exception (see log)" );
                     re.printStackTrace();
                 }
                 else {
-                    console.error( MODEL_LOADER_CATEGORY, 0, "Problem loading " + resourceURI + " : " + cause );
+                    console.error( MODEL_LOADER_CATEGORY, 0, "Problem loading ", resourceName, ": got exception ", cause );
                 }
             }
             catch( Exception e ) {
-                console.output( RiseClipseMessage.error( MODEL_LOADER_CATEGORY, 0, "Problem loading " + resourceURI + " : " + e ));
+                console.error( MODEL_LOADER_CATEGORY, 0, "Problem loading ", resourceName, ": got exception ", e );
             }
             
         }

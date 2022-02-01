@@ -40,21 +40,24 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
 
     // ANSI escape codes for colors
     private static final String ANSI_RESET    = "\u001B[0m";
-    private static final String ANSI_BLACK    = "\u001B[30m";
+    //private static final String ANSI_BLACK  = "\u001B[30m";
     private static final String ANSI_RED      = "\u001B[31m";
-    //private static final String ANSI_GREEN  = "\u001B[32m";
+    private static final String ANSI_GREEN    = "\u001B[32m";
     private static final String ANSI_YELLOW   = "\u001B[33m";
     private static final String ANSI_BLUE     = "\u001B[34m";
-    //private static final String ANSI_PURPLE = "\u001B[35m";
+    private static final String ANSI_PURPLE   = "\u001B[35m";
     private static final String ANSI_CYAN     = "\u001B[36m";
     //private static final String ANSI_WHITE  = "\u001B[37m";
     
     private EnumMap< Severity, String > severityColors
-            = new EnumMap<>( Map.of( Severity.VERBOSE, ANSI_CYAN,
-                                     Severity.INFO   , ANSI_BLUE,
-                                     Severity.WARNING, ANSI_YELLOW,
-                                     Severity.ERROR  , ANSI_RED,
-                                     Severity.FATAL  , ANSI_BLACK
+            = new EnumMap<>( Map.of( Severity.EMERGENCY, ANSI_YELLOW,
+                                     Severity.ALERT    , ANSI_YELLOW,
+                                     Severity.CRITICAL , ANSI_YELLOW,
+                                     Severity.ERROR    , ANSI_RED,
+                                     Severity.WARNING  , ANSI_PURPLE,
+                                     Severity.NOTICE   , ANSI_BLUE,
+                                     Severity.INFO     , ANSI_CYAN,
+                                     Severity.DEBUG    , ANSI_GREEN
                     ));
     
     /**
@@ -95,7 +98,7 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
      *   $6 is the color start prefix
      *   $7 is the color end prefix
      */
-    private @NonNull String formatString = "%6$s%1$-7s%7$s: [%2$s] %4$s (%5$s:%3$d)";
+    private @NonNull String formatString = "%6$s%1$-8s%7$s: [%2$s] %4$s (%5$s:%3$d)";
     
     @Override
     public @NonNull String getFormatString() {
@@ -160,28 +163,26 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
     
     @Override
     public void output( @NonNull RiseClipseMessage message ) {
-        if( currentLevel.compareTo( message.getSeverity() ) <= 0 ) {
-            Formatter formatter = new Formatter();
-            formatter.format(
-                    formatString,
-                    message.getSeverity(),
-                    message.getCategory(),
-                    message.getLineNumber(),
-                    message.getMessage(),
-                    message.getFilename() == null ? "" : message.getFilename(),
-                    useColor ? severityColors.get( message.getSeverity() ) : "",
-                    useColor ? ANSI_RESET                                  : ""
-            );
-            String m = formatter.toString();
-            formatter.close();
-            if( displayedMessages != null ) {
-                if( displayedMessages.contains( m )) {
-                    return;
-                }
-                displayedMessages.add( m );
+        Formatter formatter = new Formatter();
+        formatter.format(
+                formatString,
+                message.getSeverity(),
+                message.getCategory(),
+                message.getLineNumber(),
+                message.getMessage(),
+                message.getFilename() == null ? "" : message.getFilename(),
+                useColor ? severityColors.get( message.getSeverity() ) : "",
+                useColor ? ANSI_RESET                                  : ""
+        );
+        String m = formatter.toString();
+        formatter.close();
+        if( displayedMessages != null ) {
+            if( displayedMessages.contains( m )) {
+                return;
             }
-            doOutputMessage( m );
+            displayedMessages.add( m );
         }
+        doOutputMessage( m );
     }
 
     /**

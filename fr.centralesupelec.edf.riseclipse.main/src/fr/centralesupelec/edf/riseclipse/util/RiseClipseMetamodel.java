@@ -58,10 +58,10 @@ public class RiseClipseMetamodel {
             saxParser = saxParserFactory.newSAXParser();
         }
         catch( ParserConfigurationException e ) {
-            throw new RiseClipseFatalException( "RiseClipseMetamodel.static", e );
+            AbstractRiseClipseConsole.getConsole().emergency( "RiseClipse", 0, "RiseClipseMetamodel.static: got ParserConfigurationException ", e );
         }
         catch( SAXException e ) {
-            throw new RiseClipseFatalException( "RiseClipseMetamodel.static", e );
+            AbstractRiseClipseConsole.getConsole().emergency( "RiseClipse", 0, "RiseClipseMetamodel.static: got SAXException ", e );
         }
     }
 
@@ -71,11 +71,11 @@ public class RiseClipseMetamodel {
         for( int i = 0; i < contributions.length; i++ ) {
             String uri = contributions[i].getAttribute( "uri" );
             if(( uri == null ) || ( uri.isEmpty() )) {
-                throw new RiseClipseFatalException( "Invalid metamodel URI for RiseClispse", null );
+                AbstractRiseClipseConsole.getConsole().emergency( "RiseClipse", 0, "RiseClipseMetamodel.loadKnownMetamodels: invalid metamodel URI for RiseClispse" );
             }
             String name = contributions[i].getAttribute( "name" );
             if(( name == null ) || ( name.isEmpty() )) {
-                throw new RiseClipseFatalException( "Invalid metamodel name for RiseClispse", null );
+                AbstractRiseClipseConsole.getConsole().emergency( "RiseClipse", 0, "RiseClipseMetamodel.loadKnownMetamodels: invalid metamodel name for RiseClispse" );
             }
 
             String adapterFactoryName = contributions[i].getAttribute( "adapterFactory" );
