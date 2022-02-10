@@ -97,6 +97,7 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
      *   $5 is filename 
      *   $6 is the color start prefix
      *   $7 is the color end prefix
+     *   $8 is adjunct
      */
     private @NonNull String formatString = "%6$s%1$-8s%7$s: [%2$s] %4$s (%5$s:%3$d)";
     
@@ -172,7 +173,8 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
                 message.getMessage(),
                 message.getFilename() == null ? "" : message.getFilename(),
                 useColor ? severityColors.get( message.getSeverity() ) : "",
-                useColor ? ANSI_RESET                                  : ""
+                useColor ? ANSI_RESET                                  : "",
+                message.getAdjunct()
         );
         String m = formatter.toString();
         formatter.close();

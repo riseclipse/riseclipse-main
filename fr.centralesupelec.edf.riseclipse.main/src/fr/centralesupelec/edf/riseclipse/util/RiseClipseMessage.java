@@ -28,6 +28,7 @@ public class RiseClipseMessage {
     private String filename;
     private int lineNumber;
     private @NonNull Object[] messageParts;
+    private String adjunct;
     
     // Conversion to String and concatenation is only done in getMessage()
     // to avoid doing it if message is not displayed.
@@ -37,6 +38,7 @@ public class RiseClipseMessage {
         this.category = category;
         this.lineNumber = line;
         this.messageParts = messageParts;
+        this.adjunct = "";
     }
 
     public static RiseClipseMessage emergency( @NonNull String category, int lineNumber, @NonNull Object... messageParts ) {
@@ -120,6 +122,14 @@ public class RiseClipseMessage {
         return toString( messageParts );
     }
     
+    public String getAdjunct() {
+        return adjunct;
+    }
+
+    public void setAdjunct( String adjunct ) {
+        this.adjunct = adjunct;
+    }
+
     /**
      * Utility to create a String by concatenation of parts
      */
