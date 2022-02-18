@@ -163,26 +163,28 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
     
     @Override
     public void output( @NonNull RiseClipseMessage message ) {
-        Formatter formatter = new Formatter();
-        formatter.format(
-                formatString,
-                message.getSeverity(),
-                message.getCategory(),
-                message.getLineNumber(),
-                message.getMessage(),
-                message.getFilename() == null ? "" : message.getFilename(),
-                useColor ? severityColors.get( message.getSeverity() ) : "",
-                useColor ? ANSI_RESET                                  : ""
-        );
-        String m = formatter.toString();
-        formatter.close();
-        if( displayedMessages != null ) {
-            if( displayedMessages.contains( m )) {
-                return;
+        if( currentLevel.compareTo( message.getSeverity() ) >= 0 ) {
+            Formatter formatter = new Formatter();
+            formatter.format(
+                    formatString,
+                    message.getSeverity(),
+                    message.getCategory(),
+                    message.getLineNumber(),
+                    message.getMessage(),
+                    message.getFilename() == null ? "" : message.getFilename(),
+                    useColor ? severityColors.get( message.getSeverity() ) : "",
+                    useColor ? ANSI_RESET                                  : ""
+            );
+            String m = formatter.toString();
+            formatter.close();
+            if( displayedMessages != null ) {
+                if( displayedMessages.contains( m )) {
+                    return;
+                }
+                displayedMessages.add( m );
             }
-            displayedMessages.add( m );
+            doOutputMessage( m );
         }
-        doOutputMessage( m );
     }
 
     /**
