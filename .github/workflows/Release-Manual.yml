@@ -12,41 +12,46 @@ jobs:
     steps: 
     - name: Checkout ${{ github.event.repository.name }}
       uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
 
     # https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#Publishing-using-Apache-Maven
-    - name: Set up Apache Maven Central
+    - name: Set up Environment
       uses: actions/setup-java@v2
-      with: # running setup-java again overwrites the settings.xml
+      with:
         distribution: 'temurin'
         java-version: '11'
         cache: 'maven'
         server-id: ossrh # Value of the distributionManagement/repository/id field of the pom.xml
-        server-username: OSSRH_USERNAME # env variable for username in deploy
-        server-password: OSSRH_PASSWORD # env variable for token in deploy
-        gpg-private-key: ${{ secrets.RISECLIPSE_PGP_KEY_PRIVATE }} # Value of the GPG private key to import
-        gpg-passphrase: MAVEN_GPG_PASSPHRASE # env variable for GPG private key passphrase
+        server-username: MAVEN_USERNAME
+        server-password: MAVEN_PASSWORD
+        gpg-private-key: ${{ secrets.RISECLIPSE_PGP_KEY_PRIVATE }}
+        gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
-    - name: Prepare Maven Release
+    - name: Configure Git User
       run: |
-        git config user.name github-actions
         git config user.email github-actions@github.com
+        git config user.name "GitHub Actions"
+
+    - name: Switch branch to do Release
+      run: |
         git branch do_release
         git switch do_release
         git push --set-upstream origin do_release 
-        mvn --batch-mode release:prepare    
-        git push --tags
 
-    - name: Publish to OSSRH/Apache Maven Central
+    - name: Prepare Maven Release
+      run: |
+        mvn --batch-mode release:prepare    
+
+    - name: Perform Maven Release and Publish to OSSRH/Apache Maven Central
       run: mvn --batch-mode release:perform
       env:
-        OSSRH_USERNAME: ${{ secrets.RISECLIPSE_OSSRH_USERNAME }}
-        OSSRH_PASSWORD: ${{ secrets.RISECLIPSE_OSSRH_PASSWORD }}
+        MAVEN_USERNAME: ${{ secrets.RISECLIPSE_OSSRH_USERNAME }}
+        MAVEN_PASSWORD: ${{ secrets.RISECLIPSE_OSSRH_PASSWORD }}
         MAVEN_GPG_PASSPHRASE: ${{ secrets.RISECLIPSE_PGP_KEY_PASSWORD }}
 
-    - name: Clean before creating PR
-      run: mvn clean
+    - name: Clean before creating PR and push tag
+      run: |
+        mvn clean
+        git push --tags
 
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v4
@@ -55,5 +60,4 @@ jobs:
         branch: do_release
         labels: automated pr
         title: '[maven-release-plugin] prepare for next development iteration after release'
-
 
