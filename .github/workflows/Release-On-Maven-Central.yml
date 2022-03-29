@@ -1,0 +1,16 @@
+name: Release on OSSRH and Maven Central
+
+on:
+  workflow_dispatch: # Triggered manually for Release
+
+jobs:
+  call-release-on-ossrh-and-maven-central-workflow:
+    name: Release on OSSRH and Maven Central with Maven
+    # CHANGE TO master WHEN riseclipse-developer@deploy-to-maven-central-on-github WILL BE MERGED IN master
+    uses: riseclipse/riseclipse-developer/.github/workflows/Shared-Release-On-Maven-Central.yml@deploy-to-maven-central-on-github
+    secrets:
+      RISECLIPSE_PGP_KEY_PRIVATE:  ${{ secrets.RISECLIPSE_PGP_KEY_PRIVATE }}
+      RISECLIPSE_PGP_KEY_PASSWORD: ${{ secrets.RISECLIPSE_PGP_KEY_PASSWORD }}
+      RISECLIPSE_OSSRH_USERNAME:   ${{ secrets.RISECLIPSE_OSSRH_USERNAME }}
+      RISECLIPSE_OSSRH_PASSWORD:   ${{ secrets.RISECLIPSE_OSSRH_PASSWORD }}
+
