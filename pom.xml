@@ -53,6 +53,15 @@
           <localCheckout>true</localCheckout>
         </configuration>
       </plugin>
+
+      <plugin>
+        <groupId>${maven-group-id}</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+
     </plugins>
   </build>
 
