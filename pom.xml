@@ -54,7 +54,7 @@
         </configuration>
       </plugin>
     </plugins>
-  <build>
+  </build>
 
   <modules>
     <module>fr.centralesupelec.edf.riseclipse.main</module>
