@@ -1,6 +1,8 @@
 name: Release manual
 
-on: workflow_dispatch  # Manual trigger only release
+on: 
+  push:              # workflow initially not visible in Actions
+  workflow_dispatch: # Triggered manually for Release
 
 jobs:
   maven_release:
