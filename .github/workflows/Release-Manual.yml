@@ -1,7 +1,6 @@
 name: Release manual
 
-on: 
-  push:              # workflow initially not visible in Actions
+on:
   workflow_dispatch: # Triggered manually for Release
 
 jobs:
@@ -9,10 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     name: Release with Maven
 
-    steps: 
+    steps:
     - name: Checkout ${{ github.event.repository.name }}
       uses: actions/checkout@v3
 
+    # Adapted from
     # https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#Publishing-using-Apache-Maven
     - name: Set up Environment
       uses: actions/setup-java@v2
@@ -35,11 +35,11 @@ jobs:
       run: |
         git branch do_release
         git switch do_release
-        git push --set-upstream origin do_release 
+        git push --set-upstream origin do_release
 
     - name: Prepare Maven Release
       run: |
-        mvn --batch-mode release:prepare    
+        mvn --batch-mode release:prepare
 
     - name: Perform Maven Release and Publish to OSSRH/Apache Maven Central
       run: mvn --batch-mode release:perform
