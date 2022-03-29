@@ -44,22 +44,15 @@
  
   <build>
     <plugins>
+
       <plugin>
         <!-- Maven don't have access to GITHUB_TOKEN to allow git commands in GitHub actions -->
+        <!-- The workflow take care of pushing tag and creating PR -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
         <configuration>
           <pushChanges>false</pushChanges>
           <localCheckout>true</localCheckout>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>${maven-group-id}</groupId>
-        <artifactId>maven-gpg-plugin</artifactId>
-        <version>${maven-gpg-plugin-version}</version>
-        <configuration>
-          <skip>true</skip>
         </configuration>
       </plugin>
 
