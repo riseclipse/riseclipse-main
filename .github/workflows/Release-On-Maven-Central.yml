@@ -21,7 +21,6 @@ name: Release on OSSRH and Maven Central
 
 on:
   workflow_dispatch: # Triggered manually for Release
-  push:
 
 jobs:
   call-release-on-ossrh-and-maven-central-workflow:
