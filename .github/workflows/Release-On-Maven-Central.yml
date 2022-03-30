@@ -25,8 +25,7 @@ on:
 jobs:
   call-release-on-ossrh-and-maven-central-workflow:
     name: Release on OSSRH and Maven Central with Maven
-    # CHANGE TO master WHEN riseclipse-developer@deploy-to-maven-central-on-github WILL BE MERGED IN master
-    uses: riseclipse/riseclipse-developer/.github/workflows/Shared-Release-On-Maven-Central.yml@deploy-to-maven-central-on-github
+    uses: riseclipse/riseclipse-developer/.github/workflows/Shared-Release-On-Maven-Central.yml@master
     secrets:
       RISECLIPSE_PGP_KEY_PRIVATE:  ${{ secrets.RISECLIPSE_PGP_KEY_PRIVATE }}
       RISECLIPSE_PGP_KEY_PASSWORD: ${{ secrets.RISECLIPSE_PGP_KEY_PASSWORD }}
