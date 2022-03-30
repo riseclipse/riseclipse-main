@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 *************************************************************************
-**  Copyright (c) 2016-2021 CentraleSupélec & EDF.
+**  Copyright (c) 2016-2022 CentraleSupélec & EDF.
 **  All rights reserved. This program and the accompanying materials
 **  are made available under the terms of the Eclipse Public License v2.0
 **  which accompanies this distribution, and is available at
@@ -20,31 +20,28 @@
 *************************************************************************
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
  
-  <groupId>fr.centralesupelec.edf.riseclipse</groupId>
+  <groupId>io.github.riseclipse</groupId>
   <artifactId>riseclipse-main</artifactId>
-  <version>1.1.0-SNAPSHOT</version>
+  <version>1.2.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   
   <parent>
-    <groupId>fr.centralesupelec.edf.riseclipse</groupId>
+    <groupId>io.github.riseclipse</groupId>
     <artifactId>fr.centralesupelec.edf.riseclipse.developer.maven</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
-    <relativePath>../riseclipse-developer/fr.centralesupelec.edf.riseclipse.developer.maven/pom.xml</relativePath>
+    <version>1.2.2</version>
   </parent>
 
   <scm>
     <connection>scm:git:git@github.com:riseclipse/riseclipse-main.git</connection>
     <developerConnection>scm:git:git@github.com:riseclipse/riseclipse-main.git</developerConnection>
+    <url>https://github.com/riseclipse/riseclipse-main</url>
     <tag>HEAD</tag>
   </scm>
- 
+
   <modules>
     <module>fr.centralesupelec.edf.riseclipse.main</module>
   </modules>
