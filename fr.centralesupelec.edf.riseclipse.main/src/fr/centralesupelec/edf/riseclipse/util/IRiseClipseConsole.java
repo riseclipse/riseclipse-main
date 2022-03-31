@@ -286,7 +286,7 @@ public interface IRiseClipseConsole {
     /**
      * Output message on the console
      * 
-     * @param o message to be displayed
+     * @param message message to be displayed
      */
     void output( @NonNull RiseClipseMessage message );
 
