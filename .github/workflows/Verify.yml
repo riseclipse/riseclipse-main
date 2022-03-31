@@ -29,4 +29,4 @@ on:
 jobs:
   call-verify-workflow:
     name: Verify Project
-    uses: riseclipse/riseclipse-developer/.github/workflows/Shared-Verify-Components.yml@workflows/build # CHANGE REFERENCE ONCE MERGED
+    uses: riseclipse/riseclipse-developer/.github/workflows/Shared-Verify-Components.yml@master
