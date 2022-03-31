@@ -1,6 +1,6 @@
 /*
 *************************************************************************
-**  Copyright (c) 2016-2021 CentraleSupélec & EDF.
+**  Copyright (c) 2016-2022 CentraleSupélec & EDF.
 **  All rights reserved. This program and the accompanying materials
 **  are made available under the terms of the Eclipse Public License v2.0
 **  which accompanies this distribution, and is available at
@@ -27,6 +27,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.jdt.annotation.NonNull;
 
 /**
  * Minimal implementation of ResourceSet for RiseClipse conforming metamodels.
@@ -65,16 +66,16 @@ public abstract class AbstractRiseClipseResourceSet extends ResourceSetImpl impl
     }
 
     @Override
-    public void printStatistics( IRiseClipseConsole console ) {
+    public void printStatistics( @NonNull IRiseClipseConsole console ) {
         getRiseClipseResources().stream().forEach( r -> r.printStatistics( console ) );
     }
 
     @Override
-    public void finalizeLoad( IRiseClipseConsole console ) {
+    public void finalizeLoad( @NonNull IRiseClipseConsole console ) {
         getRiseClipseResources().stream().forEach( r -> r.finalizeLoad( console ) );
     }
 
-    public EList< IRiseClipseResource > getRiseClipseResources() {
+    public @NonNull EList< IRiseClipseResource > getRiseClipseResources() {
         // The list is copied, but it is expected that the number of resources is low,
         // so this should not be a problem.
         EList< IRiseClipseResource > res = new BasicEList<>();
@@ -91,7 +92,7 @@ public abstract class AbstractRiseClipseResourceSet extends ResourceSetImpl impl
      * @see org.eclipse.emf.ecore.resource.impl.ResourceSetImpl#getResource(org.eclipse.emf.common.util.URI, boolean)
      */
     @Override
-    public Resource getResource( URI uri, boolean loadOnDemand ) {
+    public @NonNull Resource getResource( @NonNull URI uri, boolean loadOnDemand ) {
         Resource res = super.getResource( uri, loadOnDemand );
         
         if( callFinalizeLoadAfterGetResource && ( res instanceof IRiseClipseResource )) {
@@ -104,7 +105,7 @@ public abstract class AbstractRiseClipseResourceSet extends ResourceSetImpl impl
      * @see org.eclipse.emf.ecore.resource.impl.ResourceSetImpl#createResource(org.eclipse.emf.common.util.URI, java.lang.String)
      */
     @Override
-    public Resource createResource( URI uri, String contentType ) {
+    public @NonNull Resource createResource( @NonNull URI uri, @NonNull String contentType ) {
         Resource res = null;
         Optional< String > metamodelName = RiseClipseMetamodel.findMetamodelFor( uri );
         if( metamodelName.isPresent() ) {
@@ -119,7 +120,7 @@ public abstract class AbstractRiseClipseResourceSet extends ResourceSetImpl impl
         return res;
     }
 
-    protected abstract IRiseClipseResource createRiseClipseResource( URI uri, String contentType );
+    protected abstract @NonNull IRiseClipseResource createRiseClipseResource( @NonNull URI uri, @NonNull String contentType );
 
 }
 

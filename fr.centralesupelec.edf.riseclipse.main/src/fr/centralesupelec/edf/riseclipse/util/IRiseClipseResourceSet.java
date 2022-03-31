@@ -1,6 +1,6 @@
 /*
 *************************************************************************
-**  Copyright (c) 2016-2021 CentraleSupélec & EDF.
+**  Copyright (c) 2016-2022 CentraleSupélec & EDF.
 **  All rights reserved. This program and the accompanying materials
 **  are made available under the terms of the Eclipse Public License v2.0
 **  which accompanies this distribution, and is available at
@@ -21,6 +21,7 @@
 package fr.centralesupelec.edf.riseclipse.util;
 
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.jdt.annotation.NonNull;
 
 /**
  * Interface which must be implemented by all ResourceSet of RiseClipse conforming metamodels.
@@ -39,7 +40,7 @@ public interface IRiseClipseResourceSet extends ResourceSet {
      * 
      * @param console the IRiseClipseConsole to use for display
      */
-    default void printStatistics( IRiseClipseConsole console ) {
+    default void printStatistics( @NonNull IRiseClipseConsole console ) {
         // Nothing
     }
 
@@ -50,7 +51,7 @@ public interface IRiseClipseResourceSet extends ResourceSet {
      * @param console the IRiseClipseConsole to use for displaying any message
      *                when running this method
      */
-    default void finalizeLoad( IRiseClipseConsole console ) {
+    default void finalizeLoad( @NonNull IRiseClipseConsole console ) {
         // Nothing
     }
     

@@ -1,6 +1,6 @@
 /*
 *************************************************************************
-**  Copyright (c) 2016-2021 CentraleSupélec & EDF.
+**  Copyright (c) 2016-2022 CentraleSupélec & EDF.
 **  All rights reserved. This program and the accompanying materials
 **  are made available under the terms of the Eclipse Public License v2.0
 **  which accompanies this distribution, and is available at
@@ -20,8 +20,10 @@
 */
 package fr.centralesupelec.edf.riseclipse.util;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 public interface IRiseClipseResourceSetFactory {
     
-    public IRiseClipseResourceSet createResourceSet( boolean strictContent );
+    public @NonNull IRiseClipseResourceSet createResourceSet( boolean strictContent );
 
 }

@@ -1,6 +1,6 @@
 /*
 *************************************************************************
-**  Copyright (c) 2016-2021 CentraleSupélec & EDF.
+**  Copyright (c) 2016-2022 CentraleSupélec & EDF.
 **  All rights reserved. This program and the accompanying materials
 **  are made available under the terms of the Eclipse Public License v2.0
 **  which accompanies this distribution, and is available at
@@ -19,6 +19,8 @@
 *************************************************************************
 */
 package fr.centralesupelec.edf.riseclipse.util;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 /**
  * Basic RiseClipse console on System.out
@@ -40,7 +42,7 @@ public class TextRiseClipseConsole extends AbstractRiseClipseConsole {
 	 * Output message on System.out
 	 */
     @Override
-    protected void doOutputMessage( String m ) {
+    protected void doOutputMessage( @NonNull String m ) {
         System.out.println( m );
         System.out.flush();
     }

@@ -1,6 +1,6 @@
 /*
 *************************************************************************
-**  Copyright (c) 2016-2021 CentraleSupélec & EDF.
+**  Copyright (c) 2016-2022 CentraleSupélec & EDF.
 **  All rights reserved. This program and the accompanying materials
 **  are made available under the terms of the Eclipse Public License v2.0
 **  which accompanies this distribution, and is available at
@@ -20,8 +20,10 @@
 */
 package fr.centralesupelec.edf.riseclipse.util;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 /**
  * RiseClipse console using a file
@@ -33,14 +35,14 @@ public class FileRiseClipseConsole extends AbstractRiseClipseConsole {
     
     private PrintWriter writer;
 
-    public FileRiseClipseConsole( String name ) {
+    public FileRiseClipseConsole( @NonNull String name ) {
         super();
         
         try {
             writer = new PrintWriter( name );
         }
-        catch( FileNotFoundException e ) {
-            throw new RiseClipseFatalException( "Unable to create file " + name, e );
+        catch( IOException e ) {
+            AbstractRiseClipseConsole.getConsole().emergency( "RiseClipse", 0, "Unable to create file ", name, ", got exception ", e );
         }
     }
 
@@ -48,7 +50,7 @@ public class FileRiseClipseConsole extends AbstractRiseClipseConsole {
      * Output message in file
      */
     @Override
-    protected void doOutputMessage( String m ) {
+    protected void doOutputMessage( @NonNull String m ) {
         writer.println( m );
         writer.flush();
     }
