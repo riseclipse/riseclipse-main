@@ -127,6 +127,8 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
      * (the previous one, if any, is forgotten).
      * The initial level is set to {@link Severity#WARNING}
      * Color is used according if argument is true
+     * 
+     * @param useColor use colored output if true
      */
     protected AbstractRiseClipseConsole( boolean useColor ) {
         console = this;
