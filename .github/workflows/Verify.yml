@@ -27,6 +27,6 @@ on:
     types: [opened, reopened]
 
 jobs:
-  call-build-workflow:
+  call-verify-workflow:
     name: Verify Project
     uses: riseclipse/riseclipse-developer/.github/workflows/Shared-Build-Components.yml@workflows/build # CHANGE REFERENCE ONCE MERGED
