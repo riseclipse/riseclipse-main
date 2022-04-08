@@ -5,5 +5,6 @@
 ## riseclipse-main
 [![License](https://img.shields.io/badge/License-EPL_2.0-blue.svg)](https://opensource.org/licenses/EPL-2.0)
 [![Build](https://github.com/riseclipse/riseclipse-main/actions/workflows/Verify.yml/badge.svg)](https://github.com/riseclipse/riseclipse-main/actions/workflows/Verify.yml)
+[![Available](https://img.shields.io/badge/Available%20on-Maven%20Central-orange)](https://repo1.maven.org/maven2/io/github/riseclipse/fr.centralesupelec.edf.riseclipse.main/)
 
 This repository contains the components used by other **RiseClipse** components.
