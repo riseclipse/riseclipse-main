@@ -17,7 +17,7 @@
 # **      https://riseclipse.github.io
 # *************************************************************************
 
-name: Verify
+name: Build
 
 # This workflow is triggered on every push to verify that the project builds correctly and runs Sonar + Unit tests
 
