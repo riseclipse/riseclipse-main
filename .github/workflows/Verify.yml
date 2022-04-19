@@ -17,7 +17,7 @@
 # **      https://riseclipse.github.io
 # *************************************************************************
 
-name: Verify
+name: Build
 
 # This workflow is triggered on every push to verify that the project builds correctly and runs Sonar + Unit tests
 
@@ -28,3 +28,5 @@ jobs:
   call-verify-workflow:
     name: Verify Project
     uses: riseclipse/riseclipse-developer/.github/workflows/Shared-Verify-Components.yml@master
+    secrets:
+       SONAR_TOKEN: ${{ secrets.RISECLIPSE_SONAR_TOKEN }}
