@@ -43,7 +43,7 @@ public class TextRiseClipseConsole extends AbstractRiseClipseConsole {
 	 */
     @Override
     protected void doOutputMessage( @NonNull String m ) {
-        System.out.println( m );
-        System.out.flush();
+        System.out.println( m );  // NOSONAR
+        System.out.flush();       // NOSONAR
     }
 }

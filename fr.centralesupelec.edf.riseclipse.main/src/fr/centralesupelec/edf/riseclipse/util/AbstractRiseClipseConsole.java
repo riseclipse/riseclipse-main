@@ -37,17 +37,17 @@ import org.eclipse.jdt.annotation.NonNull;
  *
  */
 public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
-
+    
     // ANSI escape codes for colors
     private static final String ANSI_RESET    = "\u001B[0m";
-    //private static final String ANSI_BLACK  = "\u001B[30m";
+    //private static final String ANSI_BLACK  = "\u001B[30m";  // NOSONAR
     private static final String ANSI_RED      = "\u001B[31m";
     private static final String ANSI_GREEN    = "\u001B[32m";
     private static final String ANSI_YELLOW   = "\u001B[33m";
     private static final String ANSI_BLUE     = "\u001B[34m";
     private static final String ANSI_PURPLE   = "\u001B[35m";
     private static final String ANSI_CYAN     = "\u001B[36m";
-    //private static final String ANSI_WHITE  = "\u001B[37m";
+    //private static final String ANSI_WHITE  = "\u001B[37m";  // NOSONAR
     
     private EnumMap< Severity, String > severityColors
             = new EnumMap<>( Map.of( Severity.EMERGENCY, ANSI_YELLOW,
@@ -63,7 +63,7 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
     /**
      * The unique instance of AbstractRiseClipseConsole
      */
-    protected static @NonNull IRiseClipseConsole console = new TextRiseClipseConsole();
+    protected static @NonNull IRiseClipseConsole console;
     
     /**
      * Give access to the singleton.
@@ -72,6 +72,9 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
      * @return The unique instance of AbstractRiseClipseConsole
      */
     public static synchronized @NonNull IRiseClipseConsole getConsole() {
+        if( console == null ) {
+            new TextRiseClipseConsole();
+        }
         return console;
     }
 
@@ -131,8 +134,8 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
      * @param useColor use colored output if true
      */
     protected AbstractRiseClipseConsole( boolean useColor ) {
-        console = this;
         this.useColor = useColor;
+        changeConsole( this );
     }
     
     /**
@@ -173,7 +176,7 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
                     message.getCategory(),
                     message.getLineNumber(),
                     message.getMessage(),
-                    message.getFilename() == null ? "" : message.getFilename(),
+                    message.getFilename(),
                     useColor ? severityColors.get( message.getSeverity() ) : "",
                     useColor ? ANSI_RESET                                  : ""
             );
@@ -202,7 +205,7 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
 
     @Override
     public void doNotDisplayIdenticalMessages() {
-        displayedMessages = new HashSet< String >();
+        displayedMessages = new HashSet<>();
     }
     
 }

@@ -55,12 +55,11 @@ public abstract class AbstractRiseClipseResourceSet extends ResourceSetImpl impl
     // a getResource().
     private boolean callFinalizeLoadAfterGetResource;
 
-    public AbstractRiseClipseResourceSet( boolean strictContent ) {
+    protected AbstractRiseClipseResourceSet( boolean strictContent ) {
         this.strictContent = strictContent;
         this.callFinalizeLoadAfterGetResource = false;
     }
     
-    // TODO: is unset needed ?
     public void setCallFinalizeLoadAfterGetResource() {
         callFinalizeLoadAfterGetResource = true;
     }
@@ -105,7 +104,7 @@ public abstract class AbstractRiseClipseResourceSet extends ResourceSetImpl impl
      * @see org.eclipse.emf.ecore.resource.impl.ResourceSetImpl#createResource(org.eclipse.emf.common.util.URI, java.lang.String)
      */
     @Override
-    public @NonNull Resource createResource( @NonNull URI uri, @NonNull String contentType ) {
+    public Resource createResource( @NonNull URI uri, @NonNull String contentType ) {
         Resource res = null;
         Optional< String > metamodelName = RiseClipseMetamodel.findMetamodelFor( uri );
         if( metamodelName.isPresent() ) {
