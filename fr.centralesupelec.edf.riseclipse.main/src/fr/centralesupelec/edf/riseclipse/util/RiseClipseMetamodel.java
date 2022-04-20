@@ -50,7 +50,7 @@ public class RiseClipseMetamodel {
     private static       SAXParser saxParser;
     private static final URIConverter uriConverter = new ExtensibleURIConverterImpl();
     
-    private static final String Category = "RiseClipse/Metamodel";
+    private static final String METAMODEL_CATEGORY = "RiseClipse/Metamodel";
     
     static {
         SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
@@ -58,10 +58,10 @@ public class RiseClipseMetamodel {
             saxParser = saxParserFactory.newSAXParser();
         }
         catch( ParserConfigurationException e ) {
-            AbstractRiseClipseConsole.getConsole().emergency( "RiseClipse", 0, "RiseClipseMetamodel.static: got ParserConfigurationException ", e );
+            AbstractRiseClipseConsole.getConsole().emergency( METAMODEL_CATEGORY, 0, "RiseClipseMetamodel.static: got ParserConfigurationException ", e );
         }
         catch( SAXException e ) {
-            AbstractRiseClipseConsole.getConsole().emergency( "RiseClipse", 0, "RiseClipseMetamodel.static: got SAXException ", e );
+            AbstractRiseClipseConsole.getConsole().emergency( METAMODEL_CATEGORY, 0, "RiseClipseMetamodel.static: got SAXException ", e );
         }
     }
 
@@ -71,11 +71,13 @@ public class RiseClipseMetamodel {
         for( int i = 0; i < contributions.length; i++ ) {
             String uri = contributions[i].getAttribute( "uri" );
             if(( uri == null ) || ( uri.isEmpty() )) {
-                AbstractRiseClipseConsole.getConsole().emergency( "RiseClipse", 0, "RiseClipseMetamodel.loadKnownMetamodels: invalid metamodel URI for RiseClispse" );
+                AbstractRiseClipseConsole.getConsole().emergency( METAMODEL_CATEGORY, 0, "RiseClipseMetamodel.loadKnownMetamodels: invalid metamodel URI for RiseClispse" );
+                return;
             }
             String name = contributions[i].getAttribute( "name" );
             if(( name == null ) || ( name.isEmpty() )) {
-                AbstractRiseClipseConsole.getConsole().emergency( "RiseClipse", 0, "RiseClipseMetamodel.loadKnownMetamodels: invalid metamodel name for RiseClispse" );
+                AbstractRiseClipseConsole.getConsole().emergency( METAMODEL_CATEGORY, 0, "RiseClipseMetamodel.loadKnownMetamodels: invalid metamodel name for RiseClispse" );
+                return;
             }
 
             String adapterFactoryName = contributions[i].getAttribute( "adapterFactory" );
@@ -109,11 +111,11 @@ public class RiseClipseMetamodel {
                 }
             }
             catch( CoreException e ) {
-                console.error( Category, 0, "Metamodel with uri " + uri + " has invalid factories." );
+                console.error( METAMODEL_CATEGORY, 0, "Metamodel with uri " + uri + " has invalid factories." );
                 continue;
             }
             if( knownMetamodels.get( uri ) == null ) {
-                console.info( Category, 0, "Added metamodel " + name + " for URI " + uri );
+                console.info( METAMODEL_CATEGORY, 0, "Added metamodel " + name + " for URI " + uri );
             }
             knownMetamodels.put( uri, new RiseClipseMetamodel( name, newAdapterFactory,
                     newResourceFactory, newResourceSetFactory, newViewerFilter ));
@@ -123,7 +125,7 @@ public class RiseClipseMetamodel {
     @SuppressWarnings( "serial" )
     private static class MetamodelFoundException extends SAXException {
 
-        private @NonNull String ns;
+        private final @NonNull String ns;
 
         public MetamodelFoundException( @NonNull String ns ) {
             this.ns = ns;
@@ -137,8 +139,9 @@ public class RiseClipseMetamodel {
     public static Optional< String > findMetamodelFor( @NonNull URI resourceURI ) {
 
 
-       DefaultHandler defaultHandler = new DefaultHandler() {
+        DefaultHandler defaultHandler = new DefaultHandler() {
            
+            @Override
             public void startElement( String uri, String localName, String qName, Attributes attributes )
                     throws SAXException {
                 for( int i = 0; i < attributes.getLength(); ++i ) {
@@ -153,17 +156,16 @@ public class RiseClipseMetamodel {
                     if( XMLNS_ATTRIBUTE_NAME.equals( furi ) ) {
                         String ns = attributes.getValue( i );
                         if( ns.endsWith( "#" )) ns = ns.substring( 0, ns.length() - 1 );
-                        if( knownMetamodels.containsKey( ns )) {
-                            if( knownMetamodels.get( ns ).getResourceSetFactory().isPresent() ) {
+                        if( knownMetamodels.containsKey( ns ) 
+                           && knownMetamodels.get( ns ).getResourceSetFactory().isPresent() ) {
                                 // Stop parsing and give back result
                                 // TODO: can we stop parsing without using an exception ?
                                 throw new MetamodelFoundException( ns );
-                            }
                         }
                     }
                 }
                 // no need to look after the root element
-                throw new MetamodelFoundException( null );
+                throw new MetamodelFoundException( "" );
             }
         };
 
@@ -175,10 +177,7 @@ public class RiseClipseMetamodel {
         catch( MetamodelFoundException e ) {
             res = e.getMetamodel();
         }
-        catch( SAXException e ) {
-            // Not an xml file or any other error : we will use the standard mechanism
-        }
-        catch( IOException e ) {
+        catch( SAXException | IOException e ) {
             // Not an xml file or any other error : we will use the standard mechanism
         }
         finally {
