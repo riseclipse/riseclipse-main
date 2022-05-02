@@ -22,6 +22,7 @@ package fr.centralesupelec.edf.riseclipse.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -197,6 +198,10 @@ public class RiseClipseMetamodel {
             return Optional.ofNullable( knownMetamodels.get( metamodelURI ));
         }
         return Optional.empty();
+    }
+
+    public static Collection< RiseClipseMetamodel > getKnownsMetamodels() {
+        return knownMetamodels.values();
     }
 
 
