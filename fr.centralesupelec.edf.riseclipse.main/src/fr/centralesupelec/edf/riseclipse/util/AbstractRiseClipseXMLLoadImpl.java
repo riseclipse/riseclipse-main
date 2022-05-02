@@ -39,6 +39,8 @@ public abstract class AbstractRiseClipseXMLLoadImpl extends XMLLoadImpl {
     @Override
     protected SAXParser makeParser() throws ParserConfigurationException, SAXException {
         SAXParserFactory f = SAXParserFactory.newInstance();
+        // Sonar: XML parsers should not be vulnerable to XXE attacks (java:S2755)
+        f.setFeature( "http://apache.org/xml/features/disallow-doctype-decl", true );
         f.setNamespaceAware( true );
         return f.newSAXParser();
     }
