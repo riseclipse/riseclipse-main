@@ -23,11 +23,11 @@ package fr.centralesupelec.edf.riseclipse.util;
 import org.eclipse.jdt.annotation.NonNull;
 
 public class RiseClipseMessage {
-    private @NonNull Severity severity;
-    private @NonNull String category;
-    private String filename;
-    private int lineNumber;
-    private @NonNull Object[] messageParts;
+    private final @NonNull Severity severity;
+    private final @NonNull String category;
+    private final @NonNull String filename;
+    private final int lineNumber;
+    private final @NonNull Object[] messageParts;
     
     // Conversion to String and concatenation is only done in getMessage()
     // to avoid doing it if message is not displayed.
@@ -35,6 +35,16 @@ public class RiseClipseMessage {
         super();
         this.severity = severity;
         this.category = category;
+        this.filename = "";
+        this.lineNumber = line;
+        this.messageParts = messageParts;
+    }
+
+    public RiseClipseMessage( @NonNull Severity severity, @NonNull String category, @NonNull String filename, int line, @NonNull Object... messageParts ) {
+        super();
+        this.severity = severity;
+        this.category = category;
+        this.filename = filename;
         this.lineNumber = line;
         this.messageParts = messageParts;
     }
@@ -43,56 +53,56 @@ public class RiseClipseMessage {
         return new RiseClipseMessage( Severity.EMERGENCY, category, lineNumber, messageParts );
     }
     public static RiseClipseMessage emergency( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
-        return new RiseClipseMessage( Severity.EMERGENCY, category, lineNumber, messageParts ).setFilename( filename );
+        return new RiseClipseMessage( Severity.EMERGENCY, category, filename, lineNumber, messageParts );
     }
     
     public static RiseClipseMessage alert( @NonNull String category, int lineNumber, @NonNull Object... messageParts ) {
         return new RiseClipseMessage( Severity.ALERT, category, lineNumber, messageParts );
     }
     public static RiseClipseMessage alert( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
-        return new RiseClipseMessage( Severity.ALERT, category, lineNumber, messageParts ).setFilename( filename );
+        return new RiseClipseMessage( Severity.ALERT, category, filename, lineNumber, messageParts );
     }
 
     public static RiseClipseMessage critical( @NonNull String category, int lineNumber, @NonNull Object... messageParts ) {
         return new RiseClipseMessage( Severity.CRITICAL, category, lineNumber, messageParts );
     }
     public static RiseClipseMessage critical( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
-        return new RiseClipseMessage( Severity.CRITICAL, category, lineNumber, messageParts ).setFilename( filename );
+        return new RiseClipseMessage( Severity.CRITICAL, category, filename, lineNumber, messageParts );
     }
 
     public static RiseClipseMessage error( @NonNull String category, int lineNumber, @NonNull Object... messageParts ) {
         return new RiseClipseMessage( Severity.ERROR, category, lineNumber, messageParts );
     }
     public static RiseClipseMessage error( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
-        return new RiseClipseMessage( Severity.ERROR, category, lineNumber, messageParts ).setFilename( filename );
+        return new RiseClipseMessage( Severity.ERROR, category, filename, lineNumber, messageParts );
     }
 
     public static RiseClipseMessage warning( @NonNull String category, int lineNumber, @NonNull Object... messageParts ) {
         return new RiseClipseMessage( Severity.WARNING, category, lineNumber, messageParts );
     }
     public static RiseClipseMessage warning( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
-        return new RiseClipseMessage( Severity.WARNING, category, lineNumber, messageParts ).setFilename( filename );
+        return new RiseClipseMessage( Severity.WARNING, category, filename, lineNumber, messageParts );
     }
 
     public static RiseClipseMessage notice( @NonNull String category, int lineNumber, @NonNull Object... messageParts ) {
         return new RiseClipseMessage( Severity.NOTICE, category, lineNumber, messageParts );
     }
     public static RiseClipseMessage notice( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
-        return new RiseClipseMessage( Severity.NOTICE, category, lineNumber, messageParts ).setFilename( filename );
+        return new RiseClipseMessage( Severity.NOTICE, category, filename, lineNumber, messageParts );
     }
 
     public static RiseClipseMessage info( @NonNull String category, int lineNumber, @NonNull Object... messageParts ) {
         return new RiseClipseMessage( Severity.INFO, category, lineNumber, messageParts );
     }
     public static RiseClipseMessage info( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
-        return new RiseClipseMessage( Severity.INFO, category, lineNumber, messageParts ).setFilename( filename );
+        return new RiseClipseMessage( Severity.INFO, category, filename, lineNumber, messageParts );
     }
 
     public static RiseClipseMessage debug( @NonNull String category, int lineNumber, @NonNull Object... messageParts ) {
         return new RiseClipseMessage( Severity.DEBUG, category, lineNumber, messageParts );
     }
     public static RiseClipseMessage debug( @NonNull String category, @NonNull String filename, int lineNumber, @NonNull Object... messageParts ) {
-        return new RiseClipseMessage( Severity.DEBUG, category, lineNumber, messageParts ).setFilename( filename );
+        return new RiseClipseMessage( Severity.DEBUG, category, filename, lineNumber, messageParts );
     }
 
     public @NonNull Severity getSeverity() {
@@ -105,11 +115,6 @@ public class RiseClipseMessage {
     
     public @NonNull String getFilename() {
         return filename;
-    }
-    
-    public RiseClipseMessage setFilename( @NonNull String filename ) {
-        this.filename = filename;
-        return this;
     }
     
     public int getLineNumber() {
