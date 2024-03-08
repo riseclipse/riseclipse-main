@@ -110,6 +110,10 @@ public abstract class AbstractRiseClipseConsole implements IRiseClipseConsole {
 
     @Override
     public @NonNull String setFormatString( @NonNull String formatString ) {
+        // Will throw an exception (subclass of IllegalFormatException) if something is wrong
+        Formatter f = new Formatter();
+        f.format( formatString, Severity.WARNING, "", 0, "", "", "", "" );
+        f.close();
         String oldFormat = this.formatString;
         this.formatString = formatString;
         return oldFormat;
