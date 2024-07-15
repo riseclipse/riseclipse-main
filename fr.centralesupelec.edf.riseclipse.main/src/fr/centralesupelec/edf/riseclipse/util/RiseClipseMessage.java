@@ -20,6 +20,9 @@
 */
 package fr.centralesupelec.edf.riseclipse.util;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 public class RiseClipseMessage {
@@ -132,6 +135,26 @@ public class RiseClipseMessage {
         StringBuilder s = new StringBuilder();
         for( int i = 0; i < messageParts.length; ++i ) s.append( messageParts[i].toString() );
         return s.toString();
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + Arrays.deepHashCode( messageParts );
+        result = prime * result + Objects.hash( category, filename, lineNumber, severity );
+        return result;
+    }
+
+    @Override
+    public boolean equals( Object obj ) {
+        if( this == obj ) return true;
+        if( obj == null ) return false;
+        if( getClass() != obj.getClass() ) return false;
+        RiseClipseMessage other = ( RiseClipseMessage ) obj;
+        return Objects.equals( category, other.category ) && Objects.equals( filename, other.filename )
+                && lineNumber == other.lineNumber && Arrays.deepEquals( messageParts, other.messageParts )
+                && severity == other.severity;
     }
     
 }
