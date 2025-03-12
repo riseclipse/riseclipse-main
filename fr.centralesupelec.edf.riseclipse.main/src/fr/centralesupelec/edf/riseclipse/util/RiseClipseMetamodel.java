@@ -116,7 +116,7 @@ public class RiseClipseMetamodel {
                 continue;
             }
             if( knownMetamodels.get( uri ) == null ) {
-                console.info( METAMODEL_CATEGORY, 0, "Added metamodel " + name + " for URI " + uri );
+                console.notice( METAMODEL_CATEGORY, 0, "Added metamodel " + name + " for URI " + uri );
             }
             knownMetamodels.put( uri, new RiseClipseMetamodel( name, newAdapterFactory,
                     newResourceFactory, newResourceSetFactory, newViewerFilter ));
