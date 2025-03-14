@@ -1,0 +1,35 @@
+# *************************************************************************
+# **  Copyright (c) 2025 CentraleSupélec & EDF.
+# **  All rights reserved. This program and the accompanying materials
+# **  are made available under the terms of the Eclipse Public License v2.0
+# **  which accompanies this distribution, and is available at
+# **  https://www.eclipse.org/legal/epl-v20.html
+# ** 
+# **  This file is part of the RiseClipse tool
+# **  
+# **  Contributors:
+# **      Computer Science Department, CentraleSupélec
+# **      EDF R&D
+# **  Contacts:
+# **      dominique.marcadet@centralesupelec.fr
+# **      aurelie.dehouck-neveu@edf.fr
+# **  Web site:
+# **      https://riseclipse.github.io
+# *************************************************************************
+
+name: Release snapshots on OSSRH
+
+on:
+  push:
+    branches:
+      - 'develop'
+
+jobs:
+  call-release-snapshot-on-ossrh-workflow:
+    name: Release snapshots on OSSRH
+    uses: ./.github/workflows/Shared-Deploy-Snapshot-Components.yml
+    with:
+      run_sonarqube: false
+    secrets:
+      RISECLIPSE_OSSRH_USERNAME:   ${{ secrets.RISECLIPSE_OSSRH_USERNAME }}
+      RISECLIPSE_OSSRH_PASSWORD:   ${{ secrets.RISECLIPSE_OSSRH_PASSWORD }}
