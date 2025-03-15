@@ -27,7 +27,7 @@ on:
 jobs:
   call-release-snapshot-on-ossrh-workflow:
     name: Release snapshots on OSSRH
-    uses: ./.github/workflows/Shared-Deploy-Snapshot-Components.yml
+    uses: riseclipse/riseclipse-developer/.github/workflows/Shared-Deploy-Snapshot-Components.yml@develop
     with:
       run_sonarqube: false
     secrets:
