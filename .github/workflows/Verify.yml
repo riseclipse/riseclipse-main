@@ -31,4 +31,4 @@ jobs:
     name: Verify Project
     uses: riseclipse/riseclipse-developer/.github/workflows/Shared-Verify-Components.yml@master
     secrets:
-       SONAR_TOKEN: ${{ secrets.RISECLIPSE_SONAR_TOKEN }}
+      SONAR_TOKEN: ${{ secrets.RISECLIPSE_SONAR_TOKEN }}
