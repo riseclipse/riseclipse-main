@@ -29,7 +29,7 @@ jobs:
     name: Release snapshots on OSSRH
     uses: riseclipse/riseclipse-developer/.github/workflows/Shared-Deploy-Snapshot-Components.yml@develop
     with:
-      run_sonarqube: false
+      run_sonarqube: true
     secrets:
       RISECLIPSE_OSSRH_USERNAME:   ${{ secrets.RISECLIPSE_OSSRH_USERNAME }}
       RISECLIPSE_OSSRH_PASSWORD:   ${{ secrets.RISECLIPSE_OSSRH_PASSWORD }}
