@@ -1,5 +1,5 @@
 # *************************************************************************
-# **  Copyright (c) 2022 CentraleSupélec & EDF.
+# **  Copyright (c) 2022-2025 CentraleSupélec & EDF.
 # **  All rights reserved. This program and the accompanying materials
 # **  are made available under the terms of the Eclipse Public License v2.0
 # **  which accompanies this distribution, and is available at
@@ -17,18 +17,18 @@
 # **      https://riseclipse.github.io
 # *************************************************************************
 
-name: Release on OSSRH and Maven Central
+name: Release on Maven Central
 
 on:
   workflow_dispatch: # Triggered manually for Release
 
 jobs:
-  call-release-on-ossrh-and-maven-central-workflow:
-    name: Release on OSSRH and Maven Central with Maven
+  call-release-on-maven-central-workflow:
+    name: Release on Maven Central with Maven
     uses: riseclipse/riseclipse-developer/.github/workflows/Shared-Release-On-Maven-Central.yml@master
     secrets:
       RISECLIPSE_PGP_KEY_PRIVATE:  ${{ secrets.RISECLIPSE_PGP_KEY_PRIVATE }}
       RISECLIPSE_PGP_KEY_PASSWORD: ${{ secrets.RISECLIPSE_PGP_KEY_PASSWORD }}
-      RISECLIPSE_OSSRH_USERNAME:   ${{ secrets.RISECLIPSE_OSSRH_USERNAME }}
-      RISECLIPSE_OSSRH_PASSWORD:   ${{ secrets.RISECLIPSE_OSSRH_PASSWORD }}
+      RISECLIPSE_CENTRAL_USERNAME: ${{ secrets.RISECLIPSE_CENTRAL_USERNAME }}
+      RISECLIPSE_CENTRAL_PASSWORD: ${{ secrets.RISECLIPSE_CENTRAL_PASSWORD }}
 
