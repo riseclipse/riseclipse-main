@@ -26,14 +26,14 @@
  
   <groupId>io.github.riseclipse</groupId>
   <artifactId>fr.centralesupelec.edf.riseclipse.main</artifactId>
-  <version>1.2.12-SNAPSHOT</version>
+  <version>1.2.12</version>
   <packaging>eclipse-plugin</packaging>
   <name>[bundle] RiseClipse Main</name>
 
   <parent>
     <groupId>io.github.riseclipse</groupId>
     <artifactId>riseclipse-main</artifactId>
-    <version>1.2.12-SNAPSHOT</version>
+    <version>1.2.12</version>
   </parent>
 
 </project>
