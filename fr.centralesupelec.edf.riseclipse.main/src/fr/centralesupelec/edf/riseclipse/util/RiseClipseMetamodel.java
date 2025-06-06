@@ -147,7 +147,7 @@ public class RiseClipseMetamodel {
                     throws SAXException {
                 for( int i = 0; i < attributes.getLength(); ++i ) {
                     String furi = attributes.getURI( i );
-                    if( furi.length() == 0 ) {
+                    if( furi.isEmpty() ) {
                         furi = attributes.getQName( i );
                         int dc = furi.indexOf( ':' );
                         if( dc != -1 ) {
