@@ -116,7 +116,7 @@ public class RiseClipseMetamodel {
                 continue;
             }
             if( knownMetamodels.get( uri ) == null ) {
-                console.info( METAMODEL_CATEGORY, 0, "Added metamodel " + name + " for URI " + uri );
+                console.notice( METAMODEL_CATEGORY, 0, "Added metamodel " + name + " for URI " + uri );
             }
             knownMetamodels.put( uri, new RiseClipseMetamodel( name, newAdapterFactory,
                     newResourceFactory, newResourceSetFactory, newViewerFilter ));
@@ -147,7 +147,7 @@ public class RiseClipseMetamodel {
                     throws SAXException {
                 for( int i = 0; i < attributes.getLength(); ++i ) {
                     String furi = attributes.getURI( i );
-                    if( furi.length() == 0 ) {
+                    if( furi.isEmpty() ) {
                         furi = attributes.getQName( i );
                         int dc = furi.indexOf( ':' );
                         if( dc != -1 ) {
