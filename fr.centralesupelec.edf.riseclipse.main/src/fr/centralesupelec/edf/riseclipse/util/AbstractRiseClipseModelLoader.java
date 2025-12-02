@@ -119,7 +119,7 @@ public abstract class AbstractRiseClipseModelLoader {
     }
 
     private void handleRuntimeException( String resourceName, RuntimeException re ) {
-        Throwable cause = re.getCause();
+        Throwable cause = re.getCause() != null ? re.getCause() : re.initCause( re.getCause() );
         if( cause instanceof IllegalValueException ) {
             IllegalValueException e = ( IllegalValueException ) cause;
             console.error( MODEL_LOADER_CATEGORY, resourceName, e.getLine(),
