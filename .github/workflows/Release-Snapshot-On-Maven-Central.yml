@@ -20,6 +20,7 @@
 name: Release snapshots on OSSRH
 
 on:
+  workflow_dispatch: # Allow manual trigger for expired snapshot
   push:
     branches:
       - 'develop'
