@@ -17,15 +17,16 @@
 # **      https://riseclipse.github.io
 # *************************************************************************
 
-name: Release snapshots on OSSRH
+name: Release snapshots on Maven Central
 
 on:
+  workflow_dispatch: # Allow manual trigger for expired snapshot
   push:
     branches:
       - 'develop'
 
 jobs:
-  call-release-snapshot-on-ossrh-workflow:
+  call-release-snapshot-on-maven-central-workflow:
     name: Release snapshots on Maven Central
     uses: riseclipse/riseclipse-developer/.github/workflows/Shared-Deploy-Snapshot-Components.yml@master
     with:
